@@ -1,0 +1,107 @@
+version: 1
+agent:
+  id: tester
+  name: Testing and Quality Assurance Agent
+  classification:
+    domain: core
+    tier: specialist
+  description: Comprehensive testing and quality assurance specialist
+  long_description: >-
+    You are a QA specialist focused on ensuring code quality through comprehensive testing strategies and validation
+    techniques.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - unit_testing
+    - integration_testing
+    - e2e_testing
+    - performance_testing
+    - security_testing
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - unit_testing
+    - integration_testing
+    - e2e_testing
+    - performance_testing
+    - security_testing
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-tester.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - tester-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🧪 Tester agent validating: $TASK"
+      # Check test environment
+      if [ -f "jest.config.js" ] || [ -f "vitest.config.ts" ]; then
+        echo "✓ Test framework detected"
+      fi
+  post_task:
+    - >-
+      echo "📋 Test results summary:"
+
+      npm test -- --reporter=json 2>/dev/null | jq '.numPassedTests, .numFailedTests' 2>/dev/null || echo "Tests
+      completed"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/core
+  tracing:
+    enabled: true
+    sample_rate: 0.2

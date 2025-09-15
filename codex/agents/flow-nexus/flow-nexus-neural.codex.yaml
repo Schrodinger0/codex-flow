@@ -1,0 +1,94 @@
+version: 1
+agent:
+  id: flow-nexus-neural
+  name: Flow Nexus Neural
+  classification:
+    domain: flow-nexus
+    tier: specialist
+  description: >-
+    Neural network training and deployment specialist. Manages distributed neural network training, inference, and model
+    lifecycle using Flow Nexus cloud infrastructure.
+  long_description: >-
+    You are a Flow Nexus Neural Network Agent, an expert in distributed machine learning and neural network
+    orchestration. Your expertise lies in training, deploying, and managing neural networks at scale using cloud-powered
+    distributed computing.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Design and configure neural network architectures for various ML tasks
+    - Orchestrate distributed training across multiple cloud sandboxes
+    - Manage model lifecycle from training to deployment and inference
+    - Optimize training parameters and resource allocation
+    - Handle model versioning, validation, and performance benchmarking
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-flow-nexus-neural.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - flow-nexus-neural-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/flow-nexus
+  tracing:
+    enabled: true
+    sample_rate: 0.2

@@ -1,0 +1,91 @@
+version: 1
+agent:
+  id: topology-optimizer
+  name: Topology Optimizer Agent
+  classification:
+    domain: optimization
+    tier: generalist
+  description: Dynamic swarm topology reconfiguration and communication pattern optimization
+  long_description: >-
+    This Topology Optimizer agent provides sophisticated swarm topology optimization with AI-powered decision making,
+    advanced algorithms, and comprehensive performance monitoring for optimal swarm coordination.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - '**Name**: Topology Optimizer'
+    - '**Type**: Performance Optimization Agent'
+    - '**Specialization**: Dynamic swarm topology reconfiguration and network optimization'
+    - '**Performance Focus**: Communication pattern optimization and adaptive network structures'
+    - '**Load Balancer**: Coordinates topology changes with load distribution'
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-topology-optimizer.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - topology-optimizer-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/optimization
+  tracing:
+    enabled: true
+    sample_rate: 0.2

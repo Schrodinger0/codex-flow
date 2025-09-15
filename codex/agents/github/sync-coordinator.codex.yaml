@@ -1,0 +1,119 @@
+version: 1
+agent:
+  id: sync-coordinator
+  name: GitHub Sync Coordinator
+  classification:
+    domain: github
+    tier: coordinator
+  description: >-
+    Multi-repository synchronization coordinator that manages version alignment, dependency synchronization, and
+    cross-package integration with intelligent swarm orchestration
+  long_description: |-
+    // Analyze current package states
+    Read("/workspaces/ruv-FANN/claude-code-flow/claude-code-flow/package.json")
+    Read("/workspaces/ruv-FANN/ruv-swarm/npm/package.json")
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed:
+        - mcp__github__push_files
+        - mcp__github__create_or_update_file
+        - mcp__github__get_file_contents
+        - mcp__github__create_pull_request
+        - mcp__github__search_repositories
+        - mcp__github__list_repositories
+        - mcp__claude-flow__swarm_init
+        - mcp__claude-flow__agent_spawn
+        - mcp__claude-flow__task_orchestrate
+        - mcp__claude-flow__memory_usage
+        - mcp__claude-flow__coordination_sync
+        - mcp__claude-flow__load_balance
+        - TodoWrite
+        - TodoRead
+        - Bash
+        - Read
+        - Write
+        - Edit
+        - MultiEdit
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - '**Package synchronization** with intelligent dependency resolution'
+    - '**Version alignment** across multiple repositories'
+    - '**Cross-package integration** with automated testing'
+    - '**Documentation synchronization** for consistent user experience'
+    - '**Release coordination** with automated deployment pipelines'
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-sync-coordinator.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - sync-coordinator-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - Initialize multi-repository synchronization swarm with hierarchical coordination
+    - Analyze package dependencies and version compatibility across all repositories
+    - Store synchronization state and conflict detection in swarm memory
+  post_task:
+    - Validate synchronization success across all coordinated repositories
+    - Update package documentation with synchronization status and metrics
+    - Generate comprehensive synchronization report with recommendations
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/github
+  tracing:
+    enabled: true
+    sample_rate: 0.2

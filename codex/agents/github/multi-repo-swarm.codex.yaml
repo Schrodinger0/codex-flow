@@ -1,0 +1,123 @@
+version: 1
+agent:
+  id: multi-repo-swarm
+  name: Multi-Repo Swarm - Cross-Repository Swarm Orchestration
+  classification:
+    domain: github
+    tier: coordinator
+  description: Cross-repository swarm orchestration for organization-wide automation and intelligent collaboration
+  long_description: |-
+    coordination:
+      topology: hierarchical
+      communication: webhook
+      memory: redis://shared-memory
+      
+    dependencies:
+      - from: frontend
+        to: [backend, shared]
+      - from: backend
+        to: [shared]
+    ```
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed:
+        - Bash
+        - Read
+        - Write
+        - Edit
+        - Glob
+        - Grep
+        - LS
+        - TodoWrite
+        - mcp__claude-flow__swarm_init
+        - mcp__claude-flow__agent_spawn
+        - mcp__claude-flow__task_orchestrate
+        - mcp__claude-flow__swarm_status
+        - mcp__claude-flow__memory_usage
+        - mcp__claude-flow__github_repo_analyze
+        - mcp__claude-flow__github_pr_manage
+        - mcp__claude-flow__github_sync_coord
+        - mcp__claude-flow__github_metrics
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Clear repository roles and boundaries
+    - Consistent naming conventions
+    - Documented dependencies
+    - Shared configuration standards
+    - Use appropriate sync strategies
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-multi-repo-swarm.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - multi-repo-swarm-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - gh auth status || (echo 'GitHub CLI not authenticated' && exit 1)
+    - git status --porcelain || echo 'Not in git repository'
+    - gh repo list --limit 1 >/dev/null || (echo 'No repo access' && exit 1)
+  post_task:
+    - gh pr list --state open --limit 5 | grep -q . && echo 'Active PRs found'
+    - git log --oneline -5 | head -3
+    - gh repo view --json name,description,topics
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/github
+  tracing:
+    enabled: true
+    sample_rate: 0.2

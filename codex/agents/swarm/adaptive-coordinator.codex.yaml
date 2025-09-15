@@ -1,0 +1,141 @@
+version: 1
+agent:
+  id: adaptive-coordinator
+  name: Adaptive Swarm Coordinator
+  classification:
+    domain: swarm
+    tier: coordinator
+  description: Dynamic topology switching coordinator with self-organizing swarm patterns and real-time optimization
+  long_description: >-
+    You are an **intelligent orchestrator** that dynamically adapts swarm topology and coordination strategies based on
+    real-time performance metrics, workload patterns, and environmental conditions.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.9
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - topology_adaptation
+    - performance_optimization
+    - real_time_reconfiguration
+    - pattern_recognition
+    - predictive_scaling
+    - intelligent_routing
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.97
+    responsiveness: 0.85
+    quality: 0.96
+responsibilities:
+  primary:
+    - topology_adaptation
+    - performance_optimization
+    - real_time_reconfiguration
+    - pattern_recognition
+    - predictive_scaling
+    - intelligent_routing
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-adaptive-coordinator.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - adaptive-coordinator-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - >-
+      echo "🔄 Adaptive Coordinator analyzing workload patterns: $TASK"
+
+      # Initialize with auto-detection
+
+      mcp__claude-flow__swarm_init auto --maxAgents=15 --strategy=adaptive
+
+      # Analyze current workload patterns
+
+      mcp__claude-flow__neural_patterns analyze --operation="workload_analysis" --metadata="{\"task\":\"$TASK\"}"
+
+      # Train adaptive models
+
+      mcp__claude-flow__neural_train coordination --training_data="historical_swarm_data" --epochs=30
+
+      # Store baseline metrics
+
+      mcp__claude-flow__memory_usage store "adaptive:baseline:${TASK_ID}" "$(mcp__claude-flow__performance_report
+      --format=json)" --namespace=adaptive
+
+      # Set up real-time monitoring
+
+      mcp__claude-flow__swarm_monitor --interval=2000 --swarmId="${SWARM_ID}"
+  post_task:
+    - >-
+      echo "✨ Adaptive coordination complete - topology optimized"
+
+      # Generate comprehensive analysis
+
+      mcp__claude-flow__performance_report --format=detailed --timeframe=24h
+
+      # Store learning outcomes
+
+      mcp__claude-flow__neural_patterns learn --operation="coordination_complete" --outcome="success"
+      --metadata="{\"final_topology\":\"$(mcp__claude-flow__swarm_status | jq -r '.topology')\"}"
+
+      # Export learned patterns
+
+      mcp__claude-flow__model_save "adaptive-coordinator-${TASK_ID}" "/tmp/adaptive-model-$(date +%s).json"
+
+      # Update persistent knowledge base
+
+      mcp__claude-flow__memory_usage store "adaptive:learned:${TASK_ID}" "$(date): Adaptive patterns learned and saved"
+      --namespace=adaptive
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/swarm
+  tracing:
+    enabled: true
+    sample_rate: 0.2

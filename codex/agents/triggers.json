@@ -1,0 +1,374 @@
+{
+  "keywords": {
+    "code review": [
+      "code-analyzer"
+    ],
+    "analyze code": [
+      "code-analyzer"
+    ],
+    "code quality": [
+      "code-analyzer"
+    ],
+    "refactor": [
+      "code-analyzer"
+    ],
+    "technical debt": [
+      "code-analyzer"
+    ],
+    "code smell": [
+      "code-analyzer"
+    ],
+    "architecture": [
+      "system-architect"
+    ],
+    "system design": [
+      "system-architect"
+    ],
+    "scalability": [
+      "system-architect"
+    ],
+    "microservices": [
+      "system-architect"
+    ],
+    "design pattern": [
+      "system-architect"
+    ],
+    "architectural decision": [
+      "system-architect"
+    ],
+    "machine learning": [
+      "ml-developer"
+    ],
+    "ml model": [
+      "ml-developer"
+    ],
+    "train model": [
+      "ml-developer"
+    ],
+    "predict": [
+      "ml-developer"
+    ],
+    "classification": [
+      "ml-developer"
+    ],
+    "regression": [
+      "ml-developer"
+    ],
+    "neural network": [
+      "ml-developer"
+    ],
+    "api": [
+      "backend-dev"
+    ],
+    "endpoint": [
+      "backend-dev"
+    ],
+    "rest": [
+      "backend-dev"
+    ],
+    "graphql": [
+      "backend-dev"
+    ],
+    "backend": [
+      "backend-dev"
+    ],
+    "server": [
+      "backend-dev"
+    ],
+    "github actions": [
+      "cicd-engineer"
+    ],
+    "ci/cd": [
+      "cicd-engineer"
+    ],
+    "pipeline": [
+      "cicd-engineer"
+    ],
+    "workflow": [
+      "cicd-engineer"
+    ],
+    "deployment": [
+      "cicd-engineer"
+    ],
+    "continuous integration": [
+      "cicd-engineer"
+    ],
+    "api documentation": [
+      "api-docs"
+    ],
+    "openapi": [
+      "api-docs"
+    ],
+    "swagger": [
+      "api-docs"
+    ],
+    "api docs": [
+      "api-docs"
+    ],
+    "endpoint documentation": [
+      "api-docs"
+    ],
+    "react native": [
+      "mobile-dev"
+    ],
+    "mobile app": [
+      "mobile-dev"
+    ],
+    "ios app": [
+      "mobile-dev"
+    ],
+    "android app": [
+      "mobile-dev"
+    ],
+    "expo": [
+      "mobile-dev"
+    ],
+    "native module": [
+      "mobile-dev"
+    ]
+  },
+  "regex": [
+    {
+      "pattern": "^review .* code$",
+      "priority": "medium",
+      "agents": [
+        "code-analyzer"
+      ]
+    },
+    {
+      "pattern": "^analyze .* quality$",
+      "priority": "medium",
+      "agents": [
+        "code-analyzer"
+      ]
+    },
+    {
+      "pattern": "^find code smells$",
+      "priority": "medium",
+      "agents": [
+        "code-analyzer"
+      ]
+    },
+    {
+      "pattern": "^design .* architecture$",
+      "priority": "medium",
+      "agents": [
+        "system-architect"
+      ]
+    },
+    {
+      "pattern": "^plan .* system$",
+      "priority": "medium",
+      "agents": [
+        "system-architect"
+      ]
+    },
+    {
+      "pattern": "^architect .* solution$",
+      "priority": "medium",
+      "agents": [
+        "system-architect"
+      ]
+    },
+    {
+      "pattern": "^create .* model$",
+      "priority": "medium",
+      "agents": [
+        "ml-developer"
+      ]
+    },
+    {
+      "pattern": "^train .* classifier$",
+      "priority": "medium",
+      "agents": [
+        "ml-developer"
+      ]
+    },
+    {
+      "pattern": "^build ml pipeline$",
+      "priority": "medium",
+      "agents": [
+        "ml-developer"
+      ]
+    },
+    {
+      "pattern": "^create .* endpoint$",
+      "priority": "medium",
+      "agents": [
+        "backend-dev"
+      ]
+    },
+    {
+      "pattern": "^implement .* api$",
+      "priority": "medium",
+      "agents": [
+        "backend-dev"
+      ]
+    },
+    {
+      "pattern": "^add .* route$",
+      "priority": "medium",
+      "agents": [
+        "backend-dev"
+      ]
+    },
+    {
+      "pattern": "^create .* pipeline$",
+      "priority": "medium",
+      "agents": [
+        "cicd-engineer"
+      ]
+    },
+    {
+      "pattern": "^setup github actions$",
+      "priority": "medium",
+      "agents": [
+        "cicd-engineer"
+      ]
+    },
+    {
+      "pattern": "^add .* workflow$",
+      "priority": "medium",
+      "agents": [
+        "cicd-engineer"
+      ]
+    },
+    {
+      "pattern": "^document .* api$",
+      "priority": "medium",
+      "agents": [
+        "api-docs"
+      ]
+    },
+    {
+      "pattern": "^create openapi spec$",
+      "priority": "medium",
+      "agents": [
+        "api-docs"
+      ]
+    },
+    {
+      "pattern": "^update api documentation$",
+      "priority": "medium",
+      "agents": [
+        "api-docs"
+      ]
+    },
+    {
+      "pattern": "^create .* mobile app$",
+      "priority": "medium",
+      "agents": [
+        "mobile-dev"
+      ]
+    },
+    {
+      "pattern": "^build .* screen$",
+      "priority": "medium",
+      "agents": [
+        "mobile-dev"
+      ]
+    },
+    {
+      "pattern": "^implement .* native module$",
+      "priority": "medium",
+      "agents": [
+        "mobile-dev"
+      ]
+    }
+  ],
+  "file_patterns": {
+    "**/*.js": [
+      "code-analyzer"
+    ],
+    "**/*.ts": [
+      "code-analyzer"
+    ],
+    "**/*.py": [
+      "code-analyzer"
+    ],
+    "**/*.java": [
+      "code-analyzer"
+    ],
+    "**/architecture/**": [
+      "system-architect"
+    ],
+    "**/design/**": [
+      "system-architect"
+    ],
+    "*.adr.md": [
+      "system-architect"
+    ],
+    "*.puml": [
+      "system-architect"
+    ],
+    "**/*.ipynb": [
+      "ml-developer"
+    ],
+    "**/model.py": [
+      "ml-developer"
+    ],
+    "**/train.py": [
+      "ml-developer"
+    ],
+    "**/*.pkl": [
+      "ml-developer"
+    ],
+    "**/*.h5": [
+      "ml-developer"
+    ],
+    "**/api/**/*.js": [
+      "backend-dev"
+    ],
+    "**/routes/**/*.js": [
+      "backend-dev"
+    ],
+    "**/controllers/**/*.js": [
+      "backend-dev"
+    ],
+    "*.resolver.js": [
+      "backend-dev"
+    ],
+    ".github/workflows/*.yml": [
+      "cicd-engineer"
+    ],
+    ".github/workflows/*.yaml": [
+      "cicd-engineer"
+    ],
+    "**/action.yml": [
+      "cicd-engineer"
+    ],
+    "**/action.yaml": [
+      "cicd-engineer"
+    ],
+    "**/openapi.yaml": [
+      "api-docs"
+    ],
+    "**/swagger.yaml": [
+      "api-docs"
+    ],
+    "**/api-docs/**": [
+      "api-docs"
+    ],
+    "**/api.yaml": [
+      "api-docs"
+    ],
+    "**/*.jsx": [
+      "mobile-dev"
+    ],
+    "**/*.tsx": [
+      "mobile-dev"
+    ],
+    "**/App.js": [
+      "mobile-dev"
+    ],
+    "**/ios/**/*.m": [
+      "mobile-dev"
+    ],
+    "**/android/**/*.java": [
+      "mobile-dev"
+    ],
+    "app.json": [
+      "mobile-dev"
+    ]
+  }
+}

@@ -1,0 +1,116 @@
+version: 1
+agent:
+  id: project-board-sync
+  name: Project Board Sync - GitHub Projects Integration
+  classification:
+    domain: github
+    tier: coordinator
+  description: Synchronize AI swarms with GitHub Projects for visual task management, progress tracking, and team coordination
+  long_description: 'See also: [swarm-issue.md](./swarm-issue.md), [multi-repo-swarm.md](./multi-repo-swarm.md)'
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed:
+        - Bash
+        - Read
+        - Write
+        - Edit
+        - Glob
+        - Grep
+        - LS
+        - TodoWrite
+        - mcp__claude-flow__swarm_init
+        - mcp__claude-flow__agent_spawn
+        - mcp__claude-flow__task_orchestrate
+        - mcp__claude-flow__swarm_status
+        - mcp__claude-flow__memory_usage
+        - mcp__claude-flow__github_repo_analyze
+        - mcp__claude-flow__github_pr_manage
+        - mcp__claude-flow__github_issue_track
+        - mcp__claude-flow__github_metrics
+        - mcp__claude-flow__workflow_create
+        - mcp__claude-flow__workflow_execute
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Clear column definitions
+    - Consistent labeling system
+    - Regular board grooming
+    - Automation rules
+    - Bidirectional sync validation
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-project-board-sync.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - project-board-sync-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - gh auth status || (echo 'GitHub CLI not authenticated' && exit 1)
+    - gh project list --owner @me --limit 1 >/dev/null || echo 'No projects accessible'
+    - git status --porcelain || echo 'Not in git repository'
+    - gh api user | jq -r '.login' || echo 'API access check'
+  post_task:
+    - gh project list --owner @me --limit 3 | head -5
+    - gh issue list --limit 3 --json number,title,state
+    - git branch --show-current || echo 'Not on a branch'
+    - gh repo view --json name,description
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/github
+  tracing:
+    enabled: true
+    sample_rate: 0.2

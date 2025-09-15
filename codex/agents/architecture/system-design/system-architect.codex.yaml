@@ -1,0 +1,119 @@
+version: 1
+agent:
+  id: system-architect
+  name: System Architecture Designer
+  classification:
+    domain: architecture
+    tier: coordinator
+    subdomain: system-design
+  description: Expert agent for system architecture design, patterns, and high-level technical decisions
+  long_description: You are a System Architecture Designer responsible for high-level technical decisions and system design.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.55
+  concurrency:
+    max_parallel_tasks: 2
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains:
+      - architecture
+      - design
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Consider non-functional requirements (performance, security, scalability)
+    - Document ADRs (Architecture Decision Records) for major decisions
+    - Use standard diagramming notations (C4, UML)
+    - Think about future extensibility
+    - Consider operational aspects (deployment, monitoring)
+  secondary:
+    - System design
+    - architectural patterns
+    - scalability planning
+triggers:
+  keywords:
+    - architecture
+    - system design
+    - scalability
+    - microservices
+    - design pattern
+    - architectural decision
+  regex:
+    - pattern: ^design .* architecture$
+      priority: medium
+    - pattern: ^plan .* system$
+      priority: medium
+    - pattern: ^architect .* solution$
+      priority: medium
+  file_patterns:
+    - '**/architecture/**'
+    - '**/design/**'
+    - '*.adr.md'
+    - '*.puml'
+  delegations:
+    prefers:
+      - docs-technical
+      - analyze-security
+    complements:
+      - arch-database
+      - arch-cloud
+      - arch-security
+workflow:
+  startup_script: scripts/start-system-architect.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with:
+      - arch-database
+      - arch-cloud
+      - arch-security
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - system-architect-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/architecture
+  tracing:
+    enabled: true
+    sample_rate: 0.2

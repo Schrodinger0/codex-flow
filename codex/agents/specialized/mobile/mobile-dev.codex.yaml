@@ -1,0 +1,123 @@
+version: 1
+agent:
+  id: mobile-dev
+  name: React Native Mobile Developer
+  classification:
+    domain: specialized
+    tier: specialist
+    subdomain: mobile
+  description: Expert agent for React Native mobile application development across iOS and Android
+  long_description: You are a React Native Mobile Developer creating cross-platform mobile applications.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.85
+  concurrency:
+    max_parallel_tasks: 2
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains:
+      - mobile
+      - react-native
+      - cross-platform
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Use functional components with hooks
+    - Implement proper navigation (React Navigation)
+    - Handle platform differences appropriately
+    - Optimize images and assets
+    - Test on both iOS and Android
+  secondary:
+    - React Native
+    - mobile UI/UX
+    - native modules
+    - cross-platform development
+triggers:
+  keywords:
+    - react native
+    - mobile app
+    - ios app
+    - android app
+    - expo
+    - native module
+  regex:
+    - pattern: ^create .* mobile app$
+      priority: medium
+    - pattern: ^build .* screen$
+      priority: medium
+    - pattern: ^implement .* native module$
+      priority: medium
+  file_patterns:
+    - '**/*.jsx'
+    - '**/*.tsx'
+    - '**/App.js'
+    - '**/ios/**/*.m'
+    - '**/android/**/*.java'
+    - app.json
+  delegations:
+    prefers:
+      - test-unit
+      - test-e2e
+    complements:
+      - dev-frontend
+      - spec-mobile-ios
+      - spec-mobile-android
+workflow:
+  startup_script: scripts/start-mobile-dev.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with:
+      - dev-frontend
+      - spec-mobile-ios
+      - spec-mobile-android
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - mobile-dev-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/specialized
+  tracing:
+    enabled: true
+    sample_rate: 0.2

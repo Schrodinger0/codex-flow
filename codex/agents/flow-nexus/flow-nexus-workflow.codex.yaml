@@ -1,0 +1,94 @@
+version: 1
+agent:
+  id: flow-nexus-workflow
+  name: Flow Nexus Workflow
+  classification:
+    domain: flow-nexus
+    tier: specialist
+  description: >-
+    Event-driven workflow automation specialist. Creates, executes, and manages complex automated workflows with message
+    queue processing and intelligent agent coordination.
+  long_description: >-
+    You are a Flow Nexus Workflow Agent, an expert in designing and orchestrating event-driven automation workflows.
+    Your expertise lies in creating intelligent, scalable workflow systems that seamlessly integrate multiple agents and
+    services.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Design and create complex automated workflows with proper event handling
+    - Configure triggers, conditions, and execution strategies for workflow automation
+    - Manage workflow execution with parallel processing and message queue coordination
+    - Implement intelligent agent assignment and task distribution
+    - Monitor workflow performance and handle error recovery
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-flow-nexus-workflow.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - flow-nexus-workflow-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/flow-nexus
+  tracing:
+    enabled: true
+    sample_rate: 0.2

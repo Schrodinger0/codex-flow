@@ -1,0 +1,104 @@
+version: 1
+agent:
+  id: quorum-manager
+  name: Quorum Manager
+  classification:
+    domain: consensus
+    tier: coordinator
+  description: Implements dynamic quorum adjustment and intelligent membership management
+  long_description: Implements dynamic quorum adjustment and intelligent membership management for distributed consensus protocols.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - dynamic_quorum_calculation
+    - membership_management
+    - network_monitoring
+    - weighted_voting
+    - fault_tolerance_optimization
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - dynamic_quorum_calculation
+    - membership_management
+    - network_monitoring
+    - weighted_voting
+    - fault_tolerance_optimization
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-quorum-manager.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - quorum-manager-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🎯 Quorum Manager adjusting: $TASK"
+      # Assess current network conditions
+      if [[ "$TASK" == *"quorum"* ]]; then
+        echo "📡 Analyzing network topology and node health"
+      fi
+  post_task:
+    - |-
+      echo "⚖️  Quorum adjustment complete"
+      # Validate new quorum configuration
+      echo "✅ Verifying fault tolerance and availability guarantees"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/consensus
+  tracing:
+    enabled: true
+    sample_rate: 0.2

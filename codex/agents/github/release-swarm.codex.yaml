@@ -1,0 +1,115 @@
+version: 1
+agent:
+  id: release-swarm
+  name: Release Swarm - Intelligent Release Automation
+  classification:
+    domain: github
+    tier: coordinator
+  description: >-
+    Orchestrate complex software releases using AI swarms that handle everything from changelog generation to
+    multi-platform deployment
+  long_description: |-
+    **Capabilities:**
+    - Semantic commit analysis
+    - Breaking change detection
+    - Contributor attribution
+    - Migration guide generation
+    - Multi-language support
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed:
+        - Bash
+        - Read
+        - Write
+        - Edit
+        - TodoWrite
+        - TodoRead
+        - Task
+        - WebFetch
+        - mcp__github__create_pull_request
+        - mcp__github__merge_pull_request
+        - mcp__github__create_branch
+        - mcp__github__push_files
+        - mcp__github__create_issue
+        - mcp__claude-flow__swarm_init
+        - mcp__claude-flow__agent_spawn
+        - mcp__claude-flow__task_orchestrate
+        - mcp__claude-flow__parallel_execute
+        - mcp__claude-flow__load_balance
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Semantic commit analysis
+    - Breaking change detection
+    - Contributor attribution
+    - Migration guide generation
+    - Multi-language support
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-release-swarm.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - release-swarm-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/github
+  tracing:
+    enabled: true
+    sample_rate: 0.2

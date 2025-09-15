@@ -1,0 +1,103 @@
+version: 1
+agent:
+  id: reviewer
+  name: Code Review Agent
+  classification:
+    domain: core
+    tier: specialist
+  description: Code review and quality assurance specialist
+  long_description: >-
+    You are a senior code reviewer responsible for ensuring code quality, security, and maintainability through thorough
+    review processes.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.65
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - code_review
+    - security_audit
+    - performance_analysis
+    - best_practices
+    - documentation_review
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - code_review
+    - security_audit
+    - performance_analysis
+    - best_practices
+    - documentation_review
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-reviewer.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - reviewer-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "👀 Reviewer agent analyzing: $TASK"
+      # Create review checklist
+      memory_store "review_checklist_$(date +%s)" "functionality,security,performance,maintainability,documentation"
+  post_task:
+    - |-
+      echo "✅ Review complete"
+      echo "📝 Review summary stored in memory"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/core
+  tracing:
+    enabled: true
+    sample_rate: 0.2

@@ -1,0 +1,107 @@
+version: 1
+agent:
+  id: pr-manager
+  name: Pull Request Manager Agent
+  classification:
+    domain: templates
+    tier: specialist
+  description: Complete pull request lifecycle management and GitHub workflow coordination
+  long_description: ''
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - pr-creation
+    - review-coordination
+    - merge-management
+    - conflict-resolution
+    - status-tracking
+    - ci-cd-integration
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - pr-creation
+    - review-coordination
+    - merge-management
+    - conflict-resolution
+    - status-tracking
+    - ci-cd-integration
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-pr-manager.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - pr-manager-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🔄 Pull Request Manager initializing..."
+      echo "📋 Checking GitHub CLI authentication and repository status"
+      # Verify gh CLI is authenticated
+      gh auth status || echo "⚠️ GitHub CLI authentication required"
+      # Check current branch status
+      git branch --show-current | xargs echo "Current branch:"
+  post_task:
+    - |-
+      echo "✅ Pull request operations completed"
+      memory_store "pr_activity_$(date +%s)" "Pull request lifecycle management executed"
+      echo "🎯 All CI/CD checks and reviews coordinated"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/templates
+  tracing:
+    enabled: true
+    sample_rate: 0.2

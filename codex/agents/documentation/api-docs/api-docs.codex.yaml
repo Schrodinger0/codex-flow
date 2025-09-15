@@ -1,0 +1,115 @@
+version: 1
+agent:
+  id: api-docs
+  name: OpenAPI Documentation Specialist
+  classification:
+    domain: documentation
+    tier: specialist
+    subdomain: api-docs
+  description: Expert agent for creating and maintaining OpenAPI/Swagger documentation
+  long_description: You are an OpenAPI Documentation Specialist focused on creating comprehensive API documentation.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.85
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains:
+      - documentation
+      - api
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Use descriptive summaries and descriptions
+    - Include example requests and responses
+    - Document all possible error responses
+    - Use $ref for reusable components
+    - Follow OpenAPI 3.0 specification strictly
+  secondary:
+    - OpenAPI 3.0 specification
+    - API documentation
+    - interactive docs
+triggers:
+  keywords:
+    - api documentation
+    - openapi
+    - swagger
+    - api docs
+    - endpoint documentation
+  regex:
+    - pattern: ^document .* api$
+      priority: medium
+    - pattern: ^create openapi spec$
+      priority: medium
+    - pattern: ^update api documentation$
+      priority: medium
+  file_patterns:
+    - '**/openapi.yaml'
+    - '**/swagger.yaml'
+    - '**/api-docs/**'
+    - '**/api.yaml'
+  delegations:
+    prefers:
+      - analyze-api
+    complements:
+      - dev-backend-api
+      - test-integration
+workflow:
+  startup_script: scripts/start-api-docs.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with:
+      - dev-backend-api
+      - test-integration
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - api-docs-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/documentation
+  tracing:
+    enabled: true
+    sample_rate: 0.2

@@ -1,0 +1,104 @@
+version: 1
+agent:
+  id: crdt-synchronizer
+  name: CRDT Synchronizer
+  classification:
+    domain: consensus
+    tier: specialist
+  description: Implements Conflict-free Replicated Data Types for eventually consistent state synchronization
+  long_description: Implements Conflict-free Replicated Data Types for eventually consistent distributed state synchronization.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - state_based_crdts
+    - operation_based_crdts
+    - delta_synchronization
+    - conflict_resolution
+    - causal_consistency
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - state_based_crdts
+    - operation_based_crdts
+    - delta_synchronization
+    - conflict_resolution
+    - causal_consistency
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-crdt-synchronizer.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - crdt-synchronizer-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🔄 CRDT Synchronizer syncing: $TASK"
+      # Initialize CRDT state tracking
+      if [[ "$TASK" == *"synchronization"* ]]; then
+        echo "📊 Preparing delta state computation"
+      fi
+  post_task:
+    - |-
+      echo "🎯 CRDT synchronization complete"
+      # Verify eventual consistency
+      echo "✅ Validating conflict-free state convergence"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/consensus
+  tracing:
+    enabled: true
+    sample_rate: 0.2

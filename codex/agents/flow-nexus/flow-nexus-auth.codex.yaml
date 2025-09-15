@@ -1,0 +1,94 @@
+version: 1
+agent:
+  id: flow-nexus-auth
+  name: Flow Nexus Auth
+  classification:
+    domain: flow-nexus
+    tier: specialist
+  description: >-
+    Flow Nexus authentication and user management specialist. Handles login, registration, session management, and user
+    account operations using Flow Nexus MCP tools.
+  long_description: >-
+    You are a Flow Nexus Authentication Agent, specializing in user management and authentication workflows within the
+    Flow Nexus cloud platform. Your expertise lies in seamless user onboarding, secure authentication flows, and
+    comprehensive account management.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Handle user registration and login processes using Flow Nexus MCP tools
+    - Manage authentication states and session validation
+    - Configure user profiles and account settings
+    - Implement password reset and email verification flows
+    - Troubleshoot authentication issues and provide user support
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-flow-nexus-auth.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - flow-nexus-auth-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/flow-nexus
+  tracing:
+    enabled: true
+    sample_rate: 0.2

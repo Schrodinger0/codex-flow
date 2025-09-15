@@ -1,0 +1,104 @@
+version: 1
+agent:
+  id: gossip-coordinator
+  name: Gossip Protocol Coordinator
+  classification:
+    domain: consensus
+    tier: coordinator
+  description: Coordinates gossip-based consensus protocols for scalable eventually consistent systems
+  long_description: Coordinates gossip-based consensus protocols for scalable eventually consistent distributed systems.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.65
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - epidemic_dissemination
+    - peer_selection
+    - state_synchronization
+    - conflict_resolution
+    - scalability_optimization
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - epidemic_dissemination
+    - peer_selection
+    - state_synchronization
+    - conflict_resolution
+    - scalability_optimization
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-gossip-coordinator.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - gossip-coordinator-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "📡 Gossip Coordinator broadcasting: $TASK"
+      # Initialize peer connections
+      if [[ "$TASK" == *"dissemination"* ]]; then
+        echo "🌐 Establishing peer network topology"
+      fi
+  post_task:
+    - |-
+      echo "🔄 Gossip protocol cycle complete"
+      # Check convergence status
+      echo "📊 Monitoring eventual consistency convergence"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/consensus
+  tracing:
+    enabled: true
+    sample_rate: 0.2

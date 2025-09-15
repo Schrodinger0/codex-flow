@@ -1,0 +1,104 @@
+version: 1
+agent:
+  id: pseudocode
+  name: SPARC Pseudocode Agent
+  classification:
+    domain: sparc
+    tier: coordinator
+  description: SPARC Pseudocode phase specialist for algorithm design
+  long_description: >-
+    You are an algorithm design specialist focused on the Pseudocode phase of the SPARC methodology. Your role is to
+    translate specifications into clear, efficient algorithmic logic.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - algorithm_design
+    - logic_flow
+    - data_structures
+    - complexity_analysis
+    - pattern_selection
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - algorithm_design
+    - logic_flow
+    - data_structures
+    - complexity_analysis
+    - pattern_selection
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-pseudocode.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - pseudocode-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🔤 SPARC Pseudocode phase initiated"
+      memory_store "sparc_phase" "pseudocode"
+      # Retrieve specification from memory
+      memory_search "spec_complete" | tail -1
+  post_task:
+    - |-
+      echo "✅ Pseudocode phase complete"
+      memory_store "pseudo_complete_$(date +%s)" "Algorithms designed"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/sparc
+  tracing:
+    enabled: true
+    sample_rate: 0.2

@@ -1,0 +1,137 @@
+version: 1
+agent:
+  id: issue-tracker
+  name: GitHub Issue Tracker
+  classification:
+    domain: github
+    tier: specialist
+  description: >-
+    Intelligent issue management and project coordination with automated tracking, progress monitoring, and team
+    coordination
+  long_description: |-
+    // Create comprehensive issue
+    mcp__github__create_issue {
+      owner: "ruvnet",
+      repo: "ruv-FANN",
+      title: "Integration Review: claude-code-flow and ruv-swarm complete integration",
+      body: `## 🔄 Integration Review
+      
+      ### Overview
+      Comprehensive review and integration between packages.
+      
+      ### Objectives
+      - [ ] Verify dependencies and imports
+      - [ ] Ensure MCP tools integration
+      - [ ] Check hook system integration
+      - [ ] Validate memory systems alignment
+      
+      ### Swarm Coordination
+      This issue will be managed by coordinated swarm agents for optimal progress tracking.`,
+      labels: ["integration", "review", "enhancement"],
+      assignees: ["ruvnet"]
+    }
+runtime:
+  execution_mode: async
+  autonomy_level: 0.65
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - Automated issue creation with smart templates
+    - Progress tracking with swarm coordination
+    - Multi-agent collaboration on complex issues
+    - Project milestone coordination
+    - Cross-repository issue synchronization
+    - Intelligent labeling and organization
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed:
+        - mcp__claude-flow__swarm_init
+        - mcp__claude-flow__agent_spawn
+        - mcp__claude-flow__task_orchestrate
+        - mcp__claude-flow__memory_usage
+        - Bash
+        - TodoWrite
+        - Read
+        - Write
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Automated issue creation with smart templates
+    - Progress tracking with swarm coordination
+    - Multi-agent collaboration on complex issues
+    - Project milestone coordination
+    - Cross-repository issue synchronization
+    - Intelligent labeling and organization
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-issue-tracker.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - issue-tracker-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "Starting issue-tracker..."
+      echo "Initializing issue management swarm"
+      gh auth status || (echo "GitHub CLI not authenticated" && exit 1)
+      echo "Setting up issue coordination environment"
+  post_task:
+    - |-
+      echo "Completed issue-tracker"
+      echo "Issues created and coordinated"
+      echo "Progress tracking initialized"
+      echo "Swarm memory updated with issue state"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/github
+  tracing:
+    enabled: true
+    sample_rate: 0.2

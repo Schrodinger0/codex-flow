@@ -1,0 +1,123 @@
+version: 1
+agent:
+  id: swarm-pr
+  name: Swarm PR - Managing Swarms through Pull Requests
+  classification:
+    domain: github
+    tier: specialist
+  description: >-
+    Pull request swarm management agent that coordinates multi-agent code review, validation, and integration workflows
+    with automated PR lifecycle management
+  long_description: |-
+    ```markdown
+    <!-- In PR comment -->
+    /swarm init mesh 6
+    /swarm spawn coder "Implement authentication"
+    /swarm spawn tester "Write unit tests"
+    /swarm status
+    ```
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed:
+        - mcp__github__get_pull_request
+        - mcp__github__create_pull_request
+        - mcp__github__update_pull_request
+        - mcp__github__list_pull_requests
+        - mcp__github__create_pr_comment
+        - mcp__github__get_pr_diff
+        - mcp__github__merge_pull_request
+        - mcp__claude-flow__swarm_init
+        - mcp__claude-flow__agent_spawn
+        - mcp__claude-flow__task_orchestrate
+        - mcp__claude-flow__memory_usage
+        - mcp__claude-flow__coordination_sync
+        - TodoWrite
+        - TodoRead
+        - Bash
+        - Grep
+        - Read
+        - Write
+        - Edit
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - 'Topology: [mesh/hierarchical/ring/star]'
+    - 'Max Agents: [number]'
+    - 'Auto-spawn: [yes/no]'
+    - 'Priority: [high/medium/low]'
+    - '[ ] Task 1 description'
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-swarm-pr.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - swarm-pr-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - Initialize PR-specific swarm with diff analysis and impact assessment
+    - Analyze PR complexity and assign optimal agent topology
+    - Store PR metadata and diff context in swarm memory
+  post_task:
+    - Update PR with comprehensive swarm review results
+    - Coordinate merge decisions based on swarm analysis
+    - Generate PR completion metrics and learnings
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/github
+  tracing:
+    enabled: true
+    sample_rate: 0.2

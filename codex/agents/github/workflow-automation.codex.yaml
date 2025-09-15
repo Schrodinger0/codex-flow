@@ -1,0 +1,136 @@
+version: 1
+agent:
+  id: workflow-automation
+  name: Workflow Automation - GitHub Actions Integration
+  classification:
+    domain: github
+    tier: specialist
+  description: >-
+    GitHub Actions workflow automation agent that creates intelligent, self-organizing CI/CD pipelines with adaptive
+    multi-agent coordination and automated optimization
+  long_description: |-
+    jobs:
+      swarm-analysis:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v3
+          
+          - name: Initialize Swarm
+            uses: ruvnet/swarm-action@v1
+            with:
+              topology: mesh
+              max-agents: 6
+              
+          - name: Analyze Changes
+            run: |
+              npx ruv-swarm actions analyze \
+                --commit ${{ github.sha }} \
+                --suggest-tests \
+                --optimize-pipeline
+    ```
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed:
+        - mcp__github__create_workflow
+        - mcp__github__update_workflow
+        - mcp__github__list_workflows
+        - mcp__github__get_workflow_runs
+        - mcp__github__create_workflow_dispatch
+        - mcp__claude-flow__swarm_init
+        - mcp__claude-flow__agent_spawn
+        - mcp__claude-flow__task_orchestrate
+        - mcp__claude-flow__memory_usage
+        - mcp__claude-flow__performance_report
+        - mcp__claude-flow__bottleneck_analyze
+        - mcp__claude-flow__workflow_create
+        - mcp__claude-flow__automation_setup
+        - TodoWrite
+        - TodoRead
+        - Bash
+        - Read
+        - Write
+        - Edit
+        - Grep
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - 'name: Swarm Test Selection'
+    - Use reusable workflows for swarm operations
+    - Implement proper caching strategies
+    - Set appropriate timeouts
+    - Use workflow dependencies wisely
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-workflow-automation.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - workflow-automation-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - Initialize workflow automation swarm with adaptive pipeline intelligence
+    - Analyze repository structure and determine optimal CI/CD strategies
+    - Store workflow templates and automation rules in swarm memory
+  post_task:
+    - Deploy optimized workflows with continuous performance monitoring
+    - Generate workflow automation metrics and optimization recommendations
+    - Update automation rules based on swarm learning and performance data
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/github
+  tracing:
+    enabled: true
+    sample_rate: 0.2

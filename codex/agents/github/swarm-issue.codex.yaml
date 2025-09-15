@@ -1,0 +1,120 @@
+version: 1
+agent:
+  id: swarm-issue
+  name: Swarm Issue - Issue-Based Swarm Coordination
+  classification:
+    domain: github
+    tier: coordinator
+  description: >-
+    GitHub issue-based swarm coordination agent that transforms issues into intelligent multi-agent tasks with automatic
+    decomposition and progress tracking
+  long_description: |-
+    ```markdown
+    <!-- In issue comment -->
+    /swarm analyze
+    /swarm decompose 5
+    /swarm assign @agent-coder
+    /swarm estimate
+    /swarm start
+    ```
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed:
+        - mcp__github__get_issue
+        - mcp__github__create_issue
+        - mcp__github__update_issue
+        - mcp__github__list_issues
+        - mcp__github__create_issue_comment
+        - mcp__claude-flow__swarm_init
+        - mcp__claude-flow__agent_spawn
+        - mcp__claude-flow__task_orchestrate
+        - mcp__claude-flow__memory_usage
+        - TodoWrite
+        - TodoRead
+        - Bash
+        - Grep
+        - Read
+        - Write
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Include swarm configuration options
+    - Provide task breakdown structure
+    - Set clear acceptance criteria
+    - Include complexity estimates
+    - Use consistent swarm-related labels
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-swarm-issue.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - swarm-issue-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - Initialize swarm coordination system for GitHub issue management
+    - Analyze issue context and determine optimal swarm topology
+    - Store issue metadata in swarm memory for cross-agent access
+  post_task:
+    - Update issue with swarm progress and agent assignments
+    - Create follow-up tasks based on swarm analysis results
+    - Generate comprehensive swarm coordination report
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/github
+  tracing:
+    enabled: true
+    sample_rate: 0.2

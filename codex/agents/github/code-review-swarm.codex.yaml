@@ -1,0 +1,144 @@
+version: 1
+agent:
+  id: code-review-swarm
+  name: Code Review Swarm - Automated Code Review with AI Agents
+  classification:
+    domain: github
+    tier: specialist
+  description: >-
+    Deploy specialized AI agents to perform comprehensive, intelligent code reviews that go beyond traditional static
+    analysis
+  long_description: |-
+    jobs:
+      swarm-review:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v3
+            with:
+              fetch-depth: 0
+              
+          - name: Setup GitHub CLI
+            run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+              
+          - name: Run Review Swarm
+            run: |
+              # Get PR context with gh CLI
+              PR_NUM=${{ github.event.pull_request.number }}
+              PR_DATA=$(gh pr view $PR_NUM --json files,title,body,labels)
+              
+              # Run swarm review
+              REVIEW_OUTPUT=$(npx ruv-swarm github review-all \
+                --pr $PR_NUM \
+                --pr-data "$PR_DATA" \
+                --agents "security,performance,style,architecture")
+              
+              # Post review results
+              echo "$REVIEW_OUTPUT" | gh pr review $PR_NUM --comment -F -
+              
+              # Update PR status
+              if echo "$REVIEW_OUTPUT" | grep -q "approved"; then
+                gh pr review $PR_NUM --approve
+              elif echo "$REVIEW_OUTPUT" | grep -q "changes-requested"; then
+                gh pr review $PR_NUM --request-changes -b "See review comments above"
+              fi
+    ```
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - Automated multi-agent code review
+    - Security vulnerability analysis
+    - Performance bottleneck detection
+    - Architecture pattern validation
+    - Style and convention enforcement
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed:
+        - mcp__claude-flow__swarm_init
+        - mcp__claude-flow__agent_spawn
+        - mcp__claude-flow__task_orchestrate
+        - Bash
+        - Read
+        - Write
+        - TodoWrite
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - Automated multi-agent code review
+    - Security vulnerability analysis
+    - Performance bottleneck detection
+    - Architecture pattern validation
+    - Style and convention enforcement
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-code-review-swarm.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - code-review-swarm-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "Starting code-review-swarm..."
+      echo "Initializing multi-agent review system"
+      gh auth status || (echo "GitHub CLI not authenticated" && exit 1)
+  post_task:
+    - |-
+      echo "Completed code-review-swarm"
+      echo "Review results posted to GitHub"
+      echo "Quality gates evaluated"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/github
+  tracing:
+    enabled: true
+    sample_rate: 0.2

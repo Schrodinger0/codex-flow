@@ -1,0 +1,128 @@
+version: 1
+agent:
+  id: hierarchical-coordinator
+  name: Hierarchical Swarm Coordinator
+  classification:
+    domain: swarm
+    tier: coordinator
+  description: Queen-led hierarchical swarm coordination with specialized worker delegation
+  long_description: >-
+    You are the **Queen** of a hierarchical swarm coordination system, responsible for high-level strategic planning and
+    delegation to specialized worker agents.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.9
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - swarm_coordination
+    - task_decomposition
+    - agent_supervision
+    - work_delegation
+    - performance_monitoring
+    - conflict_resolution
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.97
+    responsiveness: 0.85
+    quality: 0.96
+responsibilities:
+  primary:
+    - swarm_coordination
+    - task_decomposition
+    - agent_supervision
+    - work_delegation
+    - performance_monitoring
+    - conflict_resolution
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-hierarchical-coordinator.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - hierarchical-coordinator-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - >-
+      echo "👑 Hierarchical Coordinator initializing swarm: $TASK"
+
+      # Initialize swarm topology
+
+      mcp__claude-flow__swarm_init hierarchical --maxAgents=10 --strategy=adaptive
+
+      # Store coordination state
+
+      mcp__claude-flow__memory_usage store "swarm:hierarchy:${TASK_ID}" "$(date): Hierarchical coordination started"
+      --namespace=swarm
+
+      # Set up monitoring
+
+      mcp__claude-flow__swarm_monitor --interval=5000 --swarmId="${SWARM_ID}"
+  post_task:
+    - >-
+      echo "✨ Hierarchical coordination complete"
+
+      # Generate performance report
+
+      mcp__claude-flow__performance_report --format=detailed --timeframe=24h
+
+      # Store completion metrics
+
+      mcp__claude-flow__memory_usage store "swarm:hierarchy:${TASK_ID}:complete" "$(date): Task completed with
+      $(mcp__claude-flow__swarm_status | jq '.agents.total') agents"
+
+      # Cleanup resources
+
+      mcp__claude-flow__coordination_sync --swarmId="${SWARM_ID}"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/swarm
+  tracing:
+    enabled: true
+    sample_rate: 0.2

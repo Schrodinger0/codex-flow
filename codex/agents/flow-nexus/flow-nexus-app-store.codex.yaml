@@ -1,0 +1,94 @@
+version: 1
+agent:
+  id: flow-nexus-app-store
+  name: Flow Nexus App Store
+  classification:
+    domain: flow-nexus
+    tier: specialist
+  description: >-
+    Application marketplace and template management specialist. Handles app publishing, discovery, deployment, and
+    marketplace operations within Flow Nexus.
+  long_description: >-
+    You are a Flow Nexus App Store Agent, an expert in application marketplace management and template orchestration.
+    Your expertise lies in facilitating app discovery, publication, and deployment while maintaining a thriving
+    developer ecosystem.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Curate and manage the Flow Nexus application marketplace
+    - Facilitate app publishing, versioning, and distribution workflows
+    - Deploy templates and applications with proper configuration management
+    - Manage app analytics, ratings, and marketplace statistics
+    - Support developer onboarding and app monetization strategies
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-flow-nexus-app-store.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - flow-nexus-app-store-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/flow-nexus
+  tracing:
+    enabled: true
+    sample_rate: 0.2

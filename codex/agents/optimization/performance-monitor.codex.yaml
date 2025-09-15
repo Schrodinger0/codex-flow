@@ -1,0 +1,91 @@
+version: 1
+agent:
+  id: performance-monitor
+  name: Performance Monitor Agent
+  classification:
+    domain: optimization
+    tier: generalist
+  description: Real-time metrics collection, bottleneck analysis, SLA monitoring and anomaly detection
+  long_description: >-
+    This Performance Monitor agent provides comprehensive real-time monitoring, bottleneck detection, SLA compliance
+    tracking, and advanced analytics for optimal swarm performance management.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - '**Name**: Performance Monitor'
+    - '**Type**: Performance Optimization Agent'
+    - '**Specialization**: Real-time metrics collection and bottleneck analysis'
+    - '**Performance Focus**: SLA monitoring, resource tracking, and anomaly detection'
+    - '**Load Balancer**: Provides performance data for load balancing decisions'
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-performance-monitor.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - performance-monitor-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/optimization
+  tracing:
+    enabled: true
+    sample_rate: 0.2

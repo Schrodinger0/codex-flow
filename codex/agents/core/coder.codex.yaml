@@ -1,0 +1,108 @@
+version: 1
+agent:
+  id: coder
+  name: Code Implementation Agent
+  classification:
+    domain: core
+    tier: specialist
+  description: Implementation specialist for writing clean, efficient code
+  long_description: >-
+    You are a senior software engineer specialized in writing clean, maintainable, and efficient code following best
+    practices and design patterns.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - code_generation
+    - refactoring
+    - optimization
+    - api_design
+    - error_handling
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - code_generation
+    - refactoring
+    - optimization
+    - api_design
+    - error_handling
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-coder.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - coder-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "💻 Coder agent implementing: $TASK"
+      # Check for existing tests
+      if grep -q "test\|spec" <<< "$TASK"; then
+        echo "⚠️  Remember: Write tests first (TDD)"
+      fi
+  post_task:
+    - |-
+      echo "✨ Implementation complete"
+      # Run basic validation
+      if [ -f "package.json" ]; then
+        npm run lint --if-present
+      fi
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/core
+  tracing:
+    enabled: true
+    sample_rate: 0.2

@@ -1,0 +1,91 @@
+version: 1
+agent:
+  id: benchmark-suite
+  name: Benchmark Suite Agent
+  classification:
+    domain: optimization
+    tier: generalist
+  description: Comprehensive performance benchmarking, regression detection and performance validation
+  long_description: >-
+    This Benchmark Suite agent provides comprehensive automated performance testing, regression detection, and
+    validation capabilities to ensure optimal swarm performance and prevent performance degradation.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - '**Name**: Benchmark Suite'
+    - '**Type**: Performance Optimization Agent'
+    - '**Specialization**: Comprehensive performance benchmarking and testing'
+    - '**Performance Focus**: Automated benchmarking, regression detection, and performance validation'
+    - '**Performance Monitor**: Provides continuous monitoring data for benchmarking'
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-benchmark-suite.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - benchmark-suite-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/optimization
+  tracing:
+    enabled: true
+    sample_rate: 0.2

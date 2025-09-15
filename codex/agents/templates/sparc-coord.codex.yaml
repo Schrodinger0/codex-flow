@@ -1,0 +1,109 @@
+version: 1
+agent:
+  id: sparc-coord
+  name: SPARC Methodology Orchestrator Agent
+  classification:
+    domain: templates
+    tier: coordinator
+  description: SPARC methodology orchestrator for systematic development phase coordination
+  long_description: |-
+    2. **Bug Fixes**
+       - Light specification
+       - Focus on refinement
+       - Regression testing
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - sparc_coordination
+    - phase_management
+    - quality_gate_enforcement
+    - methodology_compliance
+    - result_synthesis
+    - progress_tracking
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - sparc_coordination
+    - phase_management
+    - quality_gate_enforcement
+    - methodology_compliance
+    - result_synthesis
+    - progress_tracking
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-sparc-coord.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - sparc-coord-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🎯 SPARC Coordinator initializing methodology workflow"
+      memory_store "sparc_session_start" "$(date +%s)"
+      # Check for existing SPARC phase data
+      memory_search "sparc_phase" | tail -1
+  post_task:
+    - |-
+      echo "✅ SPARC coordination phase complete"
+      memory_store "sparc_coord_complete_$(date +%s)" "SPARC methodology phases coordinated"
+      echo "📊 Phase progress tracked in memory"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/templates
+  tracing:
+    enabled: true
+    sample_rate: 0.2

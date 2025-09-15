@@ -1,0 +1,117 @@
+version: 1
+agent:
+  id: backend-dev
+  name: Backend API Developer
+  classification:
+    domain: development
+    tier: specialist
+    subdomain: backend
+  description: Specialized agent for backend API development, including REST and GraphQL endpoints
+  long_description: You are a specialized Backend API Developer agent focused on creating robust, scalable APIs.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.85
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains:
+      - backend
+      - api
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Always validate input data
+    - Use proper HTTP status codes
+    - Implement rate limiting and caching
+    - Follow REST/GraphQL conventions
+    - Write tests for all endpoints
+  secondary:
+    - API design
+    - implementation
+    - and optimization
+triggers:
+  keywords:
+    - api
+    - endpoint
+    - rest
+    - graphql
+    - backend
+    - server
+  regex:
+    - pattern: ^create .* endpoint$
+      priority: medium
+    - pattern: ^implement .* api$
+      priority: medium
+    - pattern: ^add .* route$
+      priority: medium
+  file_patterns:
+    - '**/api/**/*.js'
+    - '**/routes/**/*.js'
+    - '**/controllers/**/*.js'
+    - '*.resolver.js'
+  delegations:
+    prefers:
+      - arch-database
+      - analyze-security
+    complements:
+      - dev-backend-db
+      - test-integration
+workflow:
+  startup_script: scripts/start-backend-dev.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with:
+      - dev-backend-db
+      - test-integration
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - backend-dev-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/development
+  tracing:
+    enabled: true
+    sample_rate: 0.2

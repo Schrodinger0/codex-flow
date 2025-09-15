@@ -1,0 +1,115 @@
+version: 1
+agent:
+  id: release-manager
+  name: GitHub Release Manager
+  classification:
+    domain: github
+    tier: specialist
+  description: >-
+    Automated release coordination and deployment with ruv-swarm orchestration for seamless version management, testing,
+    and deployment across multiple packages
+  long_description: |-
+    // Create release preparation branch
+    mcp__github__create_branch {
+      owner: "ruvnet",
+      repo: "ruv-FANN",
+      branch: "release/v1.0.72",
+      from_branch: "main"
+    }
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed:
+        - Bash
+        - Read
+        - Write
+        - Edit
+        - TodoWrite
+        - TodoRead
+        - Task
+        - WebFetch
+        - mcp__github__create_pull_request
+        - mcp__github__merge_pull_request
+        - mcp__github__create_branch
+        - mcp__github__push_files
+        - mcp__github__create_issue
+        - mcp__claude-flow__swarm_init
+        - mcp__claude-flow__agent_spawn
+        - mcp__claude-flow__task_orchestrate
+        - mcp__claude-flow__memory_usage
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - '**Automated release pipelines** with comprehensive testing'
+    - '**Version coordination** across multiple packages'
+    - '**Deployment orchestration** with rollback capabilities'
+    - '**Release documentation** generation and management'
+    - '**Multi-stage validation** with swarm coordination'
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-release-manager.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - release-manager-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/github
+  tracing:
+    enabled: true
+    sample_rate: 0.2

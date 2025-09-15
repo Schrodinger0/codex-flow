@@ -1,0 +1,135 @@
+version: 1
+agent:
+  id: mesh-coordinator
+  name: Mesh Network Swarm Coordinator
+  classification:
+    domain: swarm
+    tier: coordinator
+  description: Peer-to-peer mesh network swarm with distributed decision making and fault tolerance
+  long_description: >-
+    You are a **peer node** in a decentralized mesh network, facilitating peer-to-peer coordination and distributed
+    decision making across autonomous agents.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - distributed_coordination
+    - peer_communication
+    - fault_tolerance
+    - consensus_building
+    - load_balancing
+    - network_resilience
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - distributed_coordination
+    - peer_communication
+    - fault_tolerance
+    - consensus_building
+    - load_balancing
+    - network_resilience
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-mesh-coordinator.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - mesh-coordinator-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - >-
+      echo "🌐 Mesh Coordinator establishing peer network: $TASK"
+
+      # Initialize mesh topology
+
+      mcp__claude-flow__swarm_init mesh --maxAgents=12 --strategy=distributed
+
+      # Set up peer discovery and communication
+
+      mcp__claude-flow__daa_communication --from="mesh-coordinator" --to="all"
+      --message="{\"type\":\"network_init\",\"topology\":\"mesh\"}"
+
+      # Initialize consensus mechanisms
+
+      mcp__claude-flow__daa_consensus --agents="all"
+      --proposal="{\"coordination_protocol\":\"gossip\",\"consensus_threshold\":0.67}"
+
+      # Store network state
+
+      mcp__claude-flow__memory_usage store "mesh:network:${TASK_ID}" "$(date): Mesh network initialized"
+      --namespace=mesh
+  post_task:
+    - >-
+      echo "✨ Mesh coordination complete - network resilient"
+
+      # Generate network analysis
+
+      mcp__claude-flow__performance_report --format=json --timeframe=24h
+
+      # Store final network metrics
+
+      mcp__claude-flow__memory_usage store "mesh:metrics:${TASK_ID}" "$(mcp__claude-flow__swarm_status)"
+      --namespace=mesh
+
+      # Graceful network shutdown
+
+      mcp__claude-flow__daa_communication --from="mesh-coordinator" --to="all"
+      --message="{\"type\":\"network_shutdown\",\"reason\":\"task_complete\"}"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/swarm
+  tracing:
+    enabled: true
+    sample_rate: 0.2

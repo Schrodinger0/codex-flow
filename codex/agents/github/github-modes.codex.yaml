@@ -1,0 +1,114 @@
+version: 1
+agent:
+  id: github-modes
+  name: GitHub Integration Modes
+  classification:
+    domain: github
+    tier: specialist
+  description: >-
+    Comprehensive GitHub integration modes for workflow orchestration, PR management, and repository coordination with
+    batch optimization
+  long_description: 'All GitHub modes support batch operations for maximum efficiency:'
+runtime:
+  execution_mode: async
+  autonomy_level: 0.65
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - GitHub workflow orchestration
+    - Pull request management and review
+    - Issue tracking and coordination
+    - Release management and deployment
+    - Repository architecture and organization
+    - CI/CD pipeline coordination
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed:
+        - mcp__claude-flow__swarm_init
+        - mcp__claude-flow__agent_spawn
+        - mcp__claude-flow__task_orchestrate
+        - Bash
+        - TodoWrite
+        - Read
+        - Write
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - GitHub workflow orchestration
+    - Pull request management and review
+    - Issue tracking and coordination
+    - Release management and deployment
+    - Repository architecture and organization
+    - CI/CD pipeline coordination
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-github-modes.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - github-modes-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "Starting github-modes..."
+      echo "Initializing GitHub workflow coordination"
+      gh auth status || (echo "GitHub CLI authentication required" && exit 1)
+      git status > /dev/null || (echo "Not in a git repository" && exit 1)
+  post_task:
+    - |-
+      echo "Completed github-modes"
+      echo "GitHub operations synchronized"
+      echo "Workflow coordination finalized"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/github
+  tracing:
+    enabled: true
+    sample_rate: 0.2

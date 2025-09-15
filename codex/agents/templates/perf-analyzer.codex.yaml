@@ -1,0 +1,105 @@
+version: 1
+agent:
+  id: perf-analyzer
+  name: Performance Bottleneck Analyzer Agent
+  classification:
+    domain: templates
+    tier: specialist
+  description: Performance bottleneck analyzer for identifying and resolving workflow inefficiencies
+  long_description: ''
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - performance_analysis
+    - bottleneck_detection
+    - metric_collection
+    - pattern_recognition
+    - optimization_planning
+    - trend_analysis
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - performance_analysis
+    - bottleneck_detection
+    - metric_collection
+    - pattern_recognition
+    - optimization_planning
+    - trend_analysis
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-perf-analyzer.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - perf-analyzer-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "📊 Performance Analyzer starting analysis"
+      memory_store "analysis_start" "$(date +%s)"
+      # Collect baseline metrics
+      echo "📈 Collecting baseline performance metrics"
+  post_task:
+    - |-
+      echo "✅ Performance analysis complete"
+      memory_store "perf_analysis_complete_$(date +%s)" "Performance report generated"
+      echo "💡 Optimization recommendations available"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/templates
+  tracing:
+    enabled: true
+    sample_rate: 0.2

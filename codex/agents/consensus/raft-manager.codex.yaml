@@ -1,0 +1,104 @@
+version: 1
+agent:
+  id: raft-manager
+  name: Raft Consensus Manager
+  classification:
+    domain: consensus
+    tier: coordinator
+  description: Manages Raft consensus algorithm with leader election and log replication
+  long_description: Implements and manages the Raft consensus algorithm for distributed systems with strong consistency guarantees.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - leader_election
+    - log_replication
+    - follower_management
+    - membership_changes
+    - consistency_verification
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - leader_election
+    - log_replication
+    - follower_management
+    - membership_changes
+    - consistency_verification
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-raft-manager.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - raft-manager-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🗳️  Raft Manager starting: $TASK"
+      # Check cluster health before operations
+      if [[ "$TASK" == *"election"* ]]; then
+        echo "🎯 Preparing leader election process"
+      fi
+  post_task:
+    - |-
+      echo "📝 Raft operation complete"
+      # Verify log consistency
+      echo "🔍 Validating log replication and consistency"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/consensus
+  tracing:
+    enabled: true
+    sample_rate: 0.2

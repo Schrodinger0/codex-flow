@@ -1,0 +1,105 @@
+version: 1
+agent:
+  id: smart-agent
+  name: Smart Agent Coordinator
+  classification:
+    domain: templates
+    tier: specialist
+  description: Intelligent agent coordination and dynamic spawning specialist
+  long_description: ''
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - intelligent-spawning
+    - capability-matching
+    - resource-optimization
+    - pattern-learning
+    - auto-scaling
+    - workload-prediction
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - intelligent-spawning
+    - capability-matching
+    - resource-optimization
+    - pattern-learning
+    - auto-scaling
+    - workload-prediction
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-smart-agent.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - smart-agent-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🤖 Smart Agent Coordinator initializing..."
+      echo "📊 Analyzing task requirements and resource availability"
+      # Check current swarm status
+      memory_retrieve "current_swarm_status" || echo "No active swarm detected"
+  post_task:
+    - |-
+      echo "✅ Smart coordination complete"
+      memory_store "last_coordination_$(date +%s)" "Intelligent agent coordination executed"
+      echo "💡 Agent spawning patterns learned and stored"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/templates
+  tracing:
+    enabled: true
+    sample_rate: 0.2

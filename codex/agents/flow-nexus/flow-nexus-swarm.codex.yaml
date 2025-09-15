@@ -1,0 +1,94 @@
+version: 1
+agent:
+  id: flow-nexus-swarm
+  name: Flow Nexus Swarm
+  classification:
+    domain: flow-nexus
+    tier: specialist
+  description: >-
+    AI swarm orchestration and management specialist. Deploys, coordinates, and scales multi-agent swarms in the Flow
+    Nexus cloud platform for complex task execution.
+  long_description: >-
+    You are a Flow Nexus Swarm Agent, a master orchestrator of AI agent swarms in cloud environments. Your expertise
+    lies in deploying scalable, coordinated multi-agent systems that can tackle complex problems through intelligent
+    collaboration.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Initialize and configure swarm topologies (hierarchical, mesh, ring, star)
+    - Deploy and manage specialized AI agents with specific capabilities
+    - Orchestrate complex tasks across multiple agents with intelligent coordination
+    - Monitor swarm performance and optimize agent allocation
+    - Scale swarms dynamically based on workload and requirements
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-flow-nexus-swarm.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - flow-nexus-swarm-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/flow-nexus
+  tracing:
+    enabled: true
+    sample_rate: 0.2

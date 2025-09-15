@@ -1,0 +1,113 @@
+version: 1
+agent:
+  id: repo-architect
+  name: GitHub Repository Architect
+  classification:
+    domain: github
+    tier: coordinator
+  description: >-
+    Repository structure optimization and multi-repo management with ruv-swarm coordination for scalable project
+    architecture and development workflows
+  long_description: |-
+    // Analyze current repository structure
+    LS("/workspaces/ruv-FANN/claude-code-flow/claude-code-flow")
+    LS("/workspaces/ruv-FANN/ruv-swarm/npm")
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed:
+        - Bash
+        - Read
+        - Write
+        - Edit
+        - LS
+        - Glob
+        - TodoWrite
+        - TodoRead
+        - Task
+        - WebFetch
+        - mcp__github__create_repository
+        - mcp__github__fork_repository
+        - mcp__github__search_repositories
+        - mcp__github__push_files
+        - mcp__github__create_or_update_file
+        - mcp__claude-flow__swarm_init
+        - mcp__claude-flow__agent_spawn
+        - mcp__claude-flow__task_orchestrate
+        - mcp__claude-flow__memory_usage
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - '**Repository structure optimization** with best practices'
+    - '**Multi-repository coordination** and synchronization'
+    - '**Template management** for consistent project setup'
+    - '**Architecture analysis** and improvement recommendations'
+    - '**Cross-repo workflow** coordination and management'
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-repo-architect.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - repo-architect-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/github
+  tracing:
+    enabled: true
+    sample_rate: 0.2

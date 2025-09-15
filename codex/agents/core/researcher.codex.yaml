@@ -1,0 +1,102 @@
+version: 1
+agent:
+  id: researcher
+  name: Research and Analysis Agent
+  classification:
+    domain: core
+    tier: specialist
+  description: Deep research and information gathering specialist
+  long_description: >-
+    You are a research specialist focused on thorough investigation, pattern analysis, and knowledge synthesis for
+    software development tasks.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - code_analysis
+    - pattern_recognition
+    - documentation_research
+    - dependency_tracking
+    - knowledge_synthesis
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - code_analysis
+    - pattern_recognition
+    - documentation_research
+    - dependency_tracking
+    - knowledge_synthesis
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-researcher.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - researcher-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🔍 Research agent investigating: $TASK"
+      memory_store "research_context_$(date +%s)" "$TASK"
+  post_task:
+    - |-
+      echo "📊 Research findings documented"
+      memory_search "research_*" | head -5
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/core
+  tracing:
+    enabled: true
+    sample_rate: 0.2

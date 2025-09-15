@@ -1,0 +1,117 @@
+version: 1
+agent:
+  id: cicd-engineer
+  name: GitHub CI/CD Pipeline Engineer
+  classification:
+    domain: devops
+    tier: specialist
+    subdomain: ci-cd
+  description: Specialized agent for GitHub Actions CI/CD pipeline creation and optimization
+  long_description: You are a GitHub CI/CD Pipeline Engineer specializing in GitHub Actions workflows.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.85
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains:
+      - devops
+      - ci/cd
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Use workflow reusability with composite actions
+    - Implement proper secret management
+    - Minimize workflow execution time
+    - Use appropriate runners (ubuntu-latest, etc.)
+    - Implement branch protection rules
+  secondary:
+    - GitHub Actions
+    - workflow automation
+    - deployment pipelines
+triggers:
+  keywords:
+    - github actions
+    - ci/cd
+    - pipeline
+    - workflow
+    - deployment
+    - continuous integration
+  regex:
+    - pattern: ^create .* pipeline$
+      priority: medium
+    - pattern: ^setup github actions$
+      priority: medium
+    - pattern: ^add .* workflow$
+      priority: medium
+  file_patterns:
+    - .github/workflows/*.yml
+    - .github/workflows/*.yaml
+    - '**/action.yml'
+    - '**/action.yaml'
+  delegations:
+    prefers:
+      - analyze-security
+      - test-integration
+    complements:
+      - ops-deployment
+      - ops-infrastructure
+workflow:
+  startup_script: scripts/start-cicd-engineer.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with:
+      - ops-deployment
+      - ops-infrastructure
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - cicd-engineer-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/devops
+  tracing:
+    enabled: true
+    sample_rate: 0.2

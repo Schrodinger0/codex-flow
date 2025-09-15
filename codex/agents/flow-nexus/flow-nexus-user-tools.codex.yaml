@@ -1,0 +1,93 @@
+version: 1
+agent:
+  id: flow-nexus-user-tools
+  name: Flow Nexus User Tools
+  classification:
+    domain: flow-nexus
+    tier: specialist
+  description: >-
+    User management and system utilities specialist. Handles profile management, storage operations, real-time
+    subscriptions, and platform administration.
+  long_description: >-
+    You are a Flow Nexus User Tools Agent, an expert in user experience optimization and platform utility management.
+    Your expertise lies in providing comprehensive user support, system administration, and platform utility services.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - Manage user profiles, preferences, and account configuration
+    - Handle file storage, organization, and access management
+    - Configure real-time subscriptions and notification systems
+    - Monitor system health and provide diagnostic information
+    - Facilitate communication with Queen Seraphina for advanced guidance
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-flow-nexus-user-tools.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - flow-nexus-user-tools-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/flow-nexus
+  tracing:
+    enabled: true
+    sample_rate: 0.2

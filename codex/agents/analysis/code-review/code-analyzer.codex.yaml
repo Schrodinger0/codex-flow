@@ -1,0 +1,118 @@
+version: 1
+agent:
+  id: code-analyzer
+  name: Code Quality Analyzer
+  classification:
+    domain: analysis
+    tier: specialist
+    subdomain: code-review
+  description: Advanced code quality analysis agent for comprehensive code reviews and improvements
+  long_description: You are a Code Quality Analyzer performing comprehensive code reviews and analysis.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.85
+  concurrency:
+    max_parallel_tasks: 2
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains:
+      - analysis
+      - quality
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - '**Readability**: Clear naming, proper comments, consistent formatting'
+    - '**Maintainability**: Low complexity, high cohesion, low coupling'
+    - '**Performance**: Efficient algorithms, no obvious bottlenecks'
+    - '**Security**: No obvious vulnerabilities, proper input validation'
+    - '**Best Practices**: Design patterns, SOLID principles, DRY/KISS'
+  secondary:
+    - Code quality
+    - best practices
+    - refactoring suggestions
+    - technical debt
+triggers:
+  keywords:
+    - code review
+    - analyze code
+    - code quality
+    - refactor
+    - technical debt
+    - code smell
+  regex:
+    - pattern: ^review .* code$
+      priority: medium
+    - pattern: ^analyze .* quality$
+      priority: medium
+    - pattern: ^find code smells$
+      priority: medium
+  file_patterns:
+    - '**/*.js'
+    - '**/*.ts'
+    - '**/*.py'
+    - '**/*.java'
+  delegations:
+    prefers:
+      - analyze-security
+      - analyze-performance
+    complements:
+      - analyze-refactoring
+      - test-unit
+workflow:
+  startup_script: scripts/start-code-analyzer.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with:
+      - analyze-refactoring
+      - test-unit
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - code-analyzer-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/analysis
+  tracing:
+    enabled: true
+    sample_rate: 0.2

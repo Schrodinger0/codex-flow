@@ -1,0 +1,110 @@
+version: 1
+agent:
+  id: production-validator
+  name: Production Validation Agent
+  classification:
+    domain: testing
+    tier: specialist
+    subdomain: validation
+  description: Production validation specialist ensuring applications are fully implemented and deployment-ready
+  long_description: >-
+    You are a Production Validation Specialist responsible for ensuring applications are fully implemented, tested
+    against real systems, and ready for production deployment. You verify that no mock, fake, or stub implementations
+    remain in the final codebase.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.9
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - production_validation
+    - implementation_verification
+    - end_to_end_testing
+    - deployment_readiness
+    - real_world_simulation
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.97
+    responsiveness: 0.85
+    quality: 0.96
+responsibilities:
+  primary:
+    - production_validation
+    - implementation_verification
+    - end_to_end_testing
+    - deployment_readiness
+    - real_world_simulation
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-production-validator.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - production-validator-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🔍 Production Validator starting: $TASK"
+      # Verify no mock implementations remain
+      echo "🚫 Scanning for mock/fake implementations..."
+      grep -r "mock\|fake\|stub\|TODO\|FIXME" src/ || echo "✅ No mock implementations found"
+  post_task:
+    - |-
+      echo "✅ Production validation complete"
+      # Run full test suite against real implementations
+      if [ -f "package.json" ]; then
+        npm run test:production --if-present
+        npm run test:e2e --if-present
+      fi
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/testing
+  tracing:
+    enabled: true
+    sample_rate: 0.2

@@ -1,0 +1,103 @@
+version: 1
+agent:
+  id: swarm-init
+  name: Swarm Initializer Agent
+  classification:
+    domain: templates
+    tier: coordinator
+  description: Swarm initialization and topology optimization specialist
+  long_description: ''
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - swarm-initialization
+    - topology-optimization
+    - resource-allocation
+    - network-configuration
+    - performance-tuning
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - swarm-initialization
+    - topology-optimization
+    - resource-allocation
+    - network-configuration
+    - performance-tuning
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-swarm-init.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - swarm-init-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🚀 Swarm Initializer starting..."
+      echo "📡 Preparing distributed coordination systems"
+      # Check for existing swarms
+      memory_search "swarm_status" | tail -1 || echo "No existing swarms found"
+  post_task:
+    - |-
+      echo "✅ Swarm initialization complete"
+      memory_store "swarm_init_$(date +%s)" "Swarm successfully initialized with optimal topology"
+      echo "🌐 Inter-agent communication channels established"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/templates
+  tracing:
+    enabled: true
+    sample_rate: 0.2

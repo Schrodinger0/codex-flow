@@ -1,0 +1,12 @@
+  {
+    "name": "codex-flow",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+      "convert": "node scripts/convert-agents-to-codex.mjs",
+      "test": "node --test tests/codex/agent-converter.test.mjs"
+    },
+    "dependencies": {
+      "js-yaml": "^4.1.0"
+    }
+  }

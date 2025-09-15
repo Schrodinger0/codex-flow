@@ -1,0 +1,106 @@
+version: 1
+agent:
+  id: migration-planner
+  name: Claude Flow Commands to Agent System Migration Plan
+  classification:
+    domain: templates
+    tier: coordinator
+  description: Comprehensive migration plan for converting commands to agent-based system
+  long_description: ''
+runtime:
+  execution_mode: async
+  autonomy_level: 0.65
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - migration-planning
+    - system-transformation
+    - agent-mapping
+    - compatibility-analysis
+    - rollout-coordination
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - migration-planning
+    - system-transformation
+    - agent-mapping
+    - compatibility-analysis
+    - rollout-coordination
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-migration-planner.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - migration-planner-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "📋 Agent System Migration Planner activated"
+      echo "🔄 Analyzing current command structure for migration"
+      # Check existing command structure
+      if [ -d ".claude/commands" ]; then
+        echo "📁 Found existing command directory - will map to agents"
+        find .claude/commands -name "*.md" | wc -l | xargs echo "Commands to migrate:"
+      fi
+  post_task:
+    - |-
+      echo "✅ Migration planning completed"
+      echo "📊 Agent mapping strategy defined"
+      echo "🚀 Ready for systematic agent system rollout"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/templates
+  tracing:
+    enabled: true
+    sample_rate: 0.2

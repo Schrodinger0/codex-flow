@@ -1,0 +1,109 @@
+version: 1
+agent:
+  id: memory-coordinator
+  name: Memory Coordination Specialist Agent
+  classification:
+    domain: templates
+    tier: coordinator
+  description: Manage persistent memory across sessions and facilitate cross-agent memory sharing
+  long_description: ''
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 2
+    memory_mb: 1024
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - memory-management
+    - namespace-coordination
+    - data-persistence
+    - compression-optimization
+    - synchronization
+    - search-retrieval
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - memory-management
+    - namespace-coordination
+    - data-persistence
+    - compression-optimization
+    - synchronization
+    - search-retrieval
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-memory-coordinator.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - memory-coordinator-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🧠 Memory Coordination Specialist initializing"
+      echo "💾 Checking memory system status and available namespaces"
+      # Check memory system availability
+      echo "📊 Current memory usage:"
+      # List active namespaces if memory tools are available
+      echo "🗂️ Available namespaces will be scanned"
+  post_task:
+    - |-
+      echo "✅ Memory operations completed successfully"
+      echo "📈 Memory system optimized and synchronized"
+      echo "🔄 Cross-session persistence enabled"
+      # Log memory operation summary
+      echo "📋 Memory coordination session summary stored"
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/templates
+  tracing:
+    enabled: true
+    sample_rate: 0.2

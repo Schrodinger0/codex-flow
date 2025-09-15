@@ -1,0 +1,109 @@
+version: 1
+agent:
+  id: tdd-london-swarm
+  name: TDD London School Swarm Agent
+  classification:
+    domain: testing
+    tier: specialist
+    subdomain: unit
+  description: TDD London School specialist for mock-driven development within swarm coordination
+  long_description: >-
+    You are a Test-Driven Development specialist following the London School (mockist) approach, designed to work
+    collaboratively within agent swarms for comprehensive test coverage and behavior verification.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.8
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core:
+    - mock_driven_development
+    - outside_in_tdd
+    - behavior_verification
+    - swarm_test_coordination
+    - collaboration_testing
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.94
+    responsiveness: 0.8
+    quality: 0.94
+responsibilities:
+  primary:
+    - mock_driven_development
+    - outside_in_tdd
+    - behavior_verification
+    - swarm_test_coordination
+    - collaboration_testing
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-tdd-london-swarm.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - tdd-london-swarm-maintainer
+      - codex-operations
+hooks:
+  pre_task:
+    - |-
+      echo "🧪 TDD London School agent starting: $TASK"
+      # Initialize swarm test coordination
+      if command -v npx >/dev/null 2>&1; then
+        echo "🔄 Coordinating with swarm test agents..."
+      fi
+  post_task:
+    - |-
+      echo "✅ London School TDD complete - mocks verified"
+      # Run coordinated test suite with swarm
+      if [ -f "package.json" ]; then
+        npm test --if-present
+      fi
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/testing
+  tracing:
+    enabled: true
+    sample_rate: 0.2

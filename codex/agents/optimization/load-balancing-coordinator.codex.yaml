@@ -1,0 +1,92 @@
+version: 1
+agent:
+  id: load-balancing-coordinator
+  name: Load Balancing Coordinator Agent
+  classification:
+    domain: optimization
+    tier: generalist
+  description: Dynamic task distribution, work-stealing algorithms and adaptive load balancing
+  long_description: >-
+    This Load Balancing Coordinator agent provides comprehensive task distribution optimization with advanced
+    algorithms, real-time monitoring, and adaptive resource allocation capabilities for high-performance swarm
+    coordination.
+runtime:
+  execution_mode: async
+  autonomy_level: 0.6
+  concurrency:
+    max_parallel_tasks: 3
+    queue_strategy: priority
+  resource_limits:
+    cpu: 1
+    memory_mb: 512
+    disk_mb: 1024
+  heartbeat_interval_ms: 15000
+  timeout_ms: 600000
+capabilities:
+  core: []
+  detail:
+    languages: []
+    frameworks: []
+    domains: []
+    tools:
+      allowed: []
+      restricted: []
+  quality:
+    reliability: 0.9
+    responsiveness: 0.7
+    quality: 0.9
+responsibilities:
+  primary:
+    - '**Name**: Load Balancing Coordinator'
+    - '**Type**: Performance Optimization Agent'
+    - '**Specialization**: Dynamic task distribution and resource allocation'
+    - '**Performance Focus**: Work-stealing algorithms and adaptive load balancing'
+    - '**Performance Monitor**: Provides real-time metrics for load balancing decisions'
+  secondary: []
+triggers:
+  keywords: []
+  regex: []
+  file_patterns: []
+  delegations:
+    prefers: []
+    complements: []
+workflow:
+  startup_script: scripts/start-load-balancing-coordinator.ts
+  setup_tasks: []
+  teardown_tasks: []
+  dependencies:
+    runtime: []
+    packages: []
+memory:
+  retention:
+    short_term: 7d
+    long_term: true
+  namespaces: []
+  sharing_policy:
+    share_with: []
+    redact: []
+metrics:
+  tracked:
+    - tasks_completed
+    - avg_latency_ms
+    - success_rate
+  thresholds:
+    heartbeat_miss: 2
+    failure_rate_pct: 10
+  escalation:
+    notify:
+      - load-balancing-coordinator-maintainer
+      - codex-operations
+hooks:
+  pre_task: []
+  post_task: []
+  failure: []
+testing:
+  verification_policy: require-smoke-on-spawn
+observability:
+  log_level: info
+  log_channels:
+    - codex://logs/optimization
+  tracing:
+    enabled: true
+    sample_rate: 0.2
