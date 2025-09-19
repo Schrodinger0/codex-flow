@@ -1,0 +1,6 @@
+{
+  "type": "planning.request",
+  "instruction": "You are the planning agent. Turn the user's request into a 2-3 phase plan with parallelizable tasks mapped to these aliases: architect, planner, frontend, backend, docs, tester, validator. Output STRICT JSON only in this schema: {\"title\": string, \"why\": {alias: string,...}, \"phases\": [{\"name\": string, \"parallel\": boolean, \"tasks\": {alias: [string]}}]}. No extra commentary.",
+  "user_request": "Build a simple SaaS app for dungbeetlesaas",
+  "retry_hint": "Your previous output was not valid JSON for the required schema. Reply with ONLY valid JSON matching {\"title\": string, \"why\": {alias: string,...}, \"phases\": [{\"name\": string, \"parallel\": boolean, \"tasks\": {alias: [string]}}]}."
+}

@@ -1,0 +1,12 @@
+{"ts":"2025-09-19T07:18:37.590Z","kind":"selector_generated","mode":"heuristic","ms":10,"count":5}
+{"ts":"2025-09-19T07:18:37.606Z","kind":"decomposer_generated","mode":"llm","ms":16,"plan":1,"orders":0}
+{"ts":"2025-09-19T07:18:37.606Z","kind":"decomposer_invalid","error":"unknown_dep:Z"}
+{"ts":"2025-09-19T07:18:37.609Z","kind":"task_started","alias":"architect","agentId":"system-architect","taskId":"1758266317608-pyqqif"}
+{"ts":"2025-09-19T07:18:37.670Z","kind":"task_complete","alias":"architect","agentId":"system-architect","taskId":"1758266317608-pyqqif","ok":true,"ms":62}
+{"ts":"2025-09-19T07:18:37.671Z","kind":"telemetry","agentId":"system-architect","alias":"architect","ok":true,"ms":62,"engine":"stub"}
+{"ts":"2025-09-19T07:18:37.673Z","kind":"task_started","alias":"tester","agentId":"tester","taskId":"1758266317673-38fat0"}
+{"ts":"2025-09-19T07:18:37.673Z","kind":"task_started","alias":"validator","agentId":"production-validator","taskId":"1758266317673-r9e7mb"}
+{"ts":"2025-09-19T07:18:37.734Z","kind":"task_complete","alias":"tester","agentId":"tester","taskId":"1758266317673-38fat0","ok":true,"ms":60}
+{"ts":"2025-09-19T07:18:37.734Z","kind":"telemetry","agentId":"tester","alias":"tester","ok":true,"ms":60,"engine":"stub"}
+{"ts":"2025-09-19T07:18:37.734Z","kind":"task_complete","alias":"validator","agentId":"production-validator","taskId":"1758266317673-r9e7mb","ok":true,"ms":61}
+{"ts":"2025-09-19T07:18:37.734Z","kind":"telemetry","agentId":"production-validator","alias":"validator","ok":true,"ms":61,"engine":"stub"}

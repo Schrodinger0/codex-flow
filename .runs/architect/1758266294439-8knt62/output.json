@@ -1,0 +1,13 @@
+{
+  "alias": "architect",
+  "agentId": "system-architect",
+  "task": "Force invalid DAG",
+  "ok": true,
+  "ms": 61,
+  "engine": "stub",
+  "summary": "Simulated by architect (system-architect)",
+  "output": {
+    "note": "no-op",
+    "details": "Force invalid DAG"
+  }
+}

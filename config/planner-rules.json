@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "patterns": [
+    {
+      "match_any": ["saas", "app", "build", "scaffold", "starter"],
+      "stack": "next+nest+prisma+postgres",
+      "features": ["auth", "stripe", "docs"],
+      "aliases": {
+        "frontend": [
+          "Scaffold Next.js (App Router, TypeScript) with a landing page and a protected dashboard. Use Tailwind."
+        ],
+        "backend": [
+          "Scaffold an API server (Express or Nest-like) in server/ with endpoints: /api/health, /api/users (CRUD stub). Include Prisma ORM with Postgres schema."
+        ],
+        "docs": [
+          "Produce README with install/run steps, .env.example, and API overview."
+        ],
+        "tester": [
+          "Create minimal test scripts (jest/vitest) for API health endpoint and a render smoke test."
+        ]
+      }
+    },
+    {
+      "match_any": ["supabase", "edge", "auth", "storage"],
+      "stack": "next+supabase+edge",
+      "features": ["auth", "storage"],
+      "aliases": {
+        "frontend": [
+          "Scaffold Next.js with supabase-js client, auth UI (sign-in/sign-out), and a profile page using RLS-protected table."
+        ],
+        "backend": [
+          "Provide Supabase local config: docker-compose.yml, supabase/. Place SQL seed and policies."
+        ],
+        "docs": [
+          "Document running Supabase local (docker) and env variables for NEXT_PUBLIC_SUPABASE_URL and ANON_KEY."
+        ]
+      }
+    },
+    {
+      "match_any": ["mobile", "react native", "expo"],
+      "stack": "expo+next",
+      "features": ["mobile"],
+      "aliases": {
+        "frontend": [
+          "Scaffold Expo app skeleton with tabs and an API call to /api/health, plus a Next.js companion web."
+        ]
+      }
+    },
+    {
+      "match_any": ["trpc", "t rpc", "t-rpc"],
+      "stack": "next+trpc+prisma",
+      "features": ["api", "type-safe"],
+      "aliases": {
+        "frontend": ["Scaffold Next.js with tRPC client and example query/mutation."],
+        "backend": ["Add tRPC router with example procedures and Prisma integration."]
+      }
+    },
+    {
+      "match_any": ["turborepo", "monorepo", "workspaces"],
+      "stack": "turborepo+next+packages/ui",
+      "features": ["monorepo"],
+      "aliases": {
+        "frontend": ["Create apps/web (Next.js) and packages/ui with a shared button component and TS config."],
+        "docs": ["Document pnpm/npm workspaces usage and dev commands for Turbo."]
+      }
+    },
+    {
+      "match_any": ["planetscale", "pscale"],
+      "stack": "next+planetscale+prisma",
+      "features": ["mysql"],
+      "aliases": {
+        "backend": ["Configure Prisma for PlanetScale (mysql) and add connection notes in README."],
+        "docs": ["Add PlanetScale setup instructions and prisma migration workflow."]
+      }
+    },
+    {
+      "match_any": ["shadcn", "shadcn/ui", "ui kit"],
+      "stack": "next+shadcn",
+      "features": ["ui"],
+      "aliases": {
+        "frontend": ["Wire shadcn/ui basics (tailwind config, simple button, layout)."],
+        "docs": ["Note shadcn/ui install steps and component generation commands."]
+      }
+    }
+  ],
+  "stacks": {
+    "next+nest+prisma+postgres": {
+      "frontend": {
+        "starter": "next"
+      },
+      "backend": {
+        "starter": "express+prisma"
+      }
+    },
+    "next+supabase+edge": {
+      "frontend": { "starter": "next+supabase" },
+      "backend": { "starter": "supabase-local" }
+    },
+    "expo+next": {
+      "frontend": { "starter": "expo" }
+    },
+    "next+trpc+prisma": {
+      "frontend": { "starter": "next" },
+      "backend": { "starter": "trpc+prisma" }
+    },
+    "turborepo+next+packages/ui": {
+      "frontend": { "starter": "turborepo" }
+    },
+    "next+planetscale+prisma": {
+      "backend": { "starter": "express+prisma" }
+    },
+    "next+shadcn": {
+      "frontend": { "starter": "next+shadcn" }
+    }
+  }
+}

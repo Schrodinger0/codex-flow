@@ -1,0 +1,13 @@
+{
+  "reviewer": [
+    "Review utils/date.ts",
+    "Review api/user.ts"
+  ],
+  "reviewer2": [
+    "Refactor suggestions for auth.ts"
+  ],
+  "architect": [
+    "Propose architecture for notifications module"
+  ]
+}
+

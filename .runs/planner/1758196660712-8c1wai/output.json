@@ -1,0 +1,13 @@
+{
+  "alias": "planner",
+  "agentId": "task-orchestrator",
+  "task": "Break down into actionable tasks per alias",
+  "ok": true,
+  "ms": 62,
+  "engine": "stub",
+  "summary": "Simulated by planner (task-orchestrator)",
+  "output": {
+    "note": "no-op",
+    "details": "Break down into actionable tasks per alias"
+  }
+}

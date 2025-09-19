@@ -1,0 +1,147 @@
+Title: Codex Flow Multiplier — PRD v2 (Easy-Mode Productization)
+
+Status: Draft for review (v2) — Updated with Next‑Phase (P0.5) plan
+Owner: Codex Platform / Runtime Team
+Scope: Make this repo a true, easy-to-use multiplier for Codex users. This revision folds in a concrete “first user” plan (P0.5) focused on a single-command quickstart, a deterministic router, and a formal runtime adapter seam, while deferring bandit/memory to later phases.
+
+1) Problem & Vision
+- Problem: Users want immediate value (parallel orchestration, rich agents, routing, memory) without plumbing. Current repo is powerful but requires piecing together loader, routing, and runtime wiring.
+- Vision: One-command onboarding, zero-conf defaults, Codex-native touchpoints, and an opinionated but swappable runtime adapter. Keep power features (triggers, concurrency, memory, bandit) but hide complexity by default.
+
+2) Goals (What “Easy Multiplier” Means)
+- Zero to demo in ≤ 60 seconds; zero config required.
+- One registry source-of-truth; no duplicate schemas.
+- Deterministic routing out-of-the-box; adaptive routing optional.
+- Safe defaults: timeouts, resource caps, and tool allowlists enforced.
+- Clear seams: plug your runtime (executeTask), memory backend, and telemetry with minimal code.
+- Docs and examples that match the code paths users will actually run.
+ - Clear modes: stub (local, no external calls) and codex (HTTP endpoint), with an included local demo endpoint for newcomers.
+
+3) Non-Goals
+- Replacing Codex’s core agent spec; instead, map to/emit Codex-native surfaces where available.
+- Provisioning managed infra; we assume Redis/PG are provided when advanced memory is enabled.
+
+4) Success Metrics (v2 Launch)
+- Onboarding: 90% of users run a parallel demo in ≤ 2 minutes (telemetry opt-in).
+- Adoption: 50% of users load the registry in their runtime within 1 hour of clone.
+- Reliability: demo runs with 0 crashes across supported OS/node versions.
+- DX: < 1 support issue per 20 users for setup.
+ - Clarity: ≥80% of first-time users correctly identify whether the run used stub vs codex mode (measured via post-run prompt or telemetry event).
+
+5) Product Surface (Deliverables)
+- CLI (new): `codex-flow` single binary (with npx support)
+  - `codex-flow quickstart` — runs a working parallel demo end-to-end (aliases, concurrency, plan/progress/output) with `--runtime stub|codex`, `--plan/--dry-run/--verbose`.
+  - `codex-flow load` — validates registry; prints index/triggers counts; flags duplicates; non‑zero exit on schema errors.
+  - `codex-flow route "<task>"` — shows deterministic routing stages with a trace (file → keywords → regex) and candidates.
+  - `codex-flow serve` — starts a local demo Codex HTTP endpoint (POST /run) for codex mode trials.
+  - (Later) `codex-flow init-memory` and `codex-flow emit agents.md`.
+- Runtime Adapter (library): `src/runtime/adapter.(m)ts`
+  - Contracts: `admit(def)`, `enforce(def)`, `executeTask(def, task, opts)`, `telemetry(def, result)`.
+  - Default: stub execution (local simulated outputs), plus codex execution (HTTP POST /run) with timeouts and basic policy gates.
+- Router (library): `src/router/index.(m)ts`
+  - Deterministic stages: file patterns → keywords → regex (precompiled); stable order; trace output.
+  - (Later) Adaptive bandit overlay (opt‑in) that only reorders within deterministic candidates.
+- Local Demo Endpoint: `codex-flow serve` (wraps a tiny server that implements POST /run { agentId, alias, task } → { summary, output }).
+- Docs: Updated `README.md`, `docs/QUICKSTART.md`, `docs/ROUTING.md`, `docs/RUNNER.md`, troubleshooting, and copy‑paste examples.
+- Examples: quickstart, routing, adapter override, codex mode, and (later) memory modes.
+
+6) User Journeys
+- 6.1 Zero‑Conf Demo
+  - `npx codex-flow@latest quickstart`
+    - Loads `codex/agents` → prints index summary and a clear Execution Plan
+    - Runs orchestrator with aliases and per‑agent concurrency; prints per‑task progress and outputs
+    - Defaults to `--runtime stub` (no external calls); can switch to `--runtime codex --codex-url http://localhost:8787`
+    - Outcome: user sees what ran, where, with which agents, and how to switch modes
+  - Outcome: user sees agents collaborating and where to plug their runtime
+
+- 6.2 Integrate With My Codex Runtime
+  - `npm i codex-flow` (lib mode) or copy `src/runtime/adapter.(m)ts`
+  - Implement `executeTask` using your runner API; keep `admit/enforce/telemetry` intact
+  - Optional: enable memory (Redis/PG) via `codex-flow init-memory`
+
+- 6.3 Author/Update Agents From Claude Markdown
+  - Place `.claude/agents/**.md`; run `npm run convert`
+  - Inspect `index.json` + `triggers.json`; run `codex-flow load`
+  - `codex-flow emit agents.md` to publish a human catalog
+
+7) Architecture Overview
+- Registry: YAML bundle + `index.json` + `triggers.json` (already present)
+- Loader: in-process; single pass parse → frozen definitions; hotset cache
+- Router: staged routing (file → keyword → regex), plus optional bandit overlay; exposes a `trace` for CLI display
+- Runtime adapter: `admit/enforce/executeTask/telemetry` shims; default stub + codex HTTP; timeouts enforced per `timeout_ms`
+- Memory: pluggable adapter (none → ephemeral → Redis/PG); policy layer enforces share/redact/retention
+ - Endpoint shape (codex mode): POST `/run` with `{ agentId, alias, task }` → `{ summary, output }`; configurable URL/key
+
+8) Bandit (Optional, Safe-Default OFF)
+- Storage: JSON file or small SQLite/PG table (pluggable). Default to in-memory ephemeral
+- Key: `(trigger, agentId)`; Reward: success vs failure, latency bucketing
+- Policy: only reorder within deterministic candidate set; cap exploration rate; persist daily snapshots
+- API: `select(trigger, candidates)` → agentId; `update(trigger, agentId, outcome)`
+
+9) Safety & Policy by Default
+- Enforce `timeout_ms`, `resource_limits`, and `capabilities.detail.tools.allowed`
+- Hooks gate: `pre_task`, `post_task`, `failure` run in restricted shell; errors logged, not fatal to task
+- Observability: default log channel prints to console; add structured JSON option
+- Hard caps: per-alias concurrency, queue length thresholds, and defensive timeouts on regex routing
+
+10) Configuration Model
+- Modes: `quickstart` (no config), `project` (local config file), `advanced` (env vars)
+- Config file: `codex-flow.config.json` (optional)
+  - `runtimeAdapter`: path to custom runner
+  - `bandit`: { enabled, store }
+  - `memory`: { mode: none|ephemeral|redis|pg, redisUrl?, pgUrl?, ttl?, maxWindow? }
+  - `logging`: { level, json }
+
+11) Developer Experience
+- Doctor command: `codex-flow load` validates schema and prints actionable diffs
+- Rich errors: present which agent failed schema parse and suggested fix
+- Tracing toggle: `--trace` flag to print staged routing decisions
+- Recipes: code snippets for common runners (Node, Python bridge)
+
+12) Docs & Content
+- `README.md`: simple landing; link to quickstart
+- `README.CODEX.md`: dense systems doc (done)
+- `docs/QUICKSTART.md`: copy-paste demo, 60 seconds
+- `docs/RUNNER.md`: implement `executeTask` in 20 lines, with 3 variants
+- `docs/ROUTING.md`: deterministic + bandit
+- `docs/MEMORY.md`: Modes, enabling, policy mapping
+
+13) Testing & Validation
+- Unit: router stages, adapter enforcement, YAML parsing edge cases
+- Integration: quickstart e2e (stub), quickstart against local `serve` (codex), memory ephemeral (later), bandit in-memory (later)
+- Performance: startup (parse < 1s for 60 agents), routing P95 < 2ms
+- Compatibility: Node LTS on macOS/Linux/Windows
+
+14) Rollout Plan (Phases)
+- P0 (1–2 days): Establish CLI skeleton; extract deterministic router (library + `route` command); wire orchestrator under `quickstart`; update quickstart docs.
+- P0.5 (2–3 days): Add runtime adapter (`admit/enforce/executeTask/telemetry`), timeouts, tool allowlist warnings; add `serve` (local demo endpoint) and codex mode flags; add `load` validation; align docs; add smoke tests.
+- P1 (3–4 days): JSON logging option, doctor output for `load`, stricter enforcement flags, troubleshooting guide.
+- P2 (3–5 days): Bandit (in-memory) with persistence option, routing trace enrichment, summary dashboard.
+- P3 (3–5 days): Memory modes (none/ephemeral), scaffolder, policy layer stubs.
+- P4 (5–7 days): Redis/PG adapters (if enabled), guide, minimal dashboards.
+- P5 (ongoing): Polish, examples, CI, perf tests, community feedback.
+
+15) Risks & Mitigations
+- Duplication with Codex-native schema → Provide `emit agents.md`, align fields, and optionally emit Codex-native JSON if spec is available
+- Users overwhelmed by options → Modeled modes (quickstart/project/advanced) and safe defaults
+- Bandit bias or regressions → Off by default; scoped exploration; A/B gate via flag
+- Memory complexity → Keep disabled by default; offer ephemeral mode without external deps
+
+16) Open Questions
+- Should we ship a Node API package and a CLI, or just CLI with importable modules?
+- Do we emit Codex-native agent JSON alongside YAML? Awaiting schema.
+- Where to store bandit state by default (project-local file vs tmp)?
+
+17) Acceptance Criteria (v2)
+- npx codex-flow quickstart prints a clear Execution Plan, runs tasks in parallel with aliases and per‑agent concurrency, shows per‑task progress and outputs, and exits 0 in stub mode.
+- Switching to codex mode works locally: `codex-flow serve` running; quickstart with `--runtime codex --codex-url http://localhost:8787` completes and outputs summaries.
+- Deterministic router is available as a library and via `codex-flow route`, printing a stage trace and non‑empty candidates for known triggers.
+- `codex-flow load` validates and reports counts; exits non‑zero on malformed YAML or duplicate IDs.
+- A single function seam (`executeTask`) exists for production runners, behind `admit/enforce/telemetry`.
+- Docs mirror the exact commands and outputs users see on first run (≤ 60 seconds path).
+
+Appendix A — Minimal Codex Endpoint (for demos)
+- Method: POST `/run`
+- Request JSON: `{ "agentId": "code-analyzer", "alias": "reviewer", "task": "Review src/file.ts" }`
+- Response JSON: `{ "summary": "Reviewed 1 file", "output": { ... } }`
+- Provided locally by `codex-flow serve`; production deployments may swap URL/contract via adapter.

@@ -1,0 +1,1 @@
+"Generate baseline starter files for stack next+nest+prisma+postgres. Return as {files:[{path,content}]}."

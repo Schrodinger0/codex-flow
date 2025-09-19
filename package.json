@@ -1,12 +1,23 @@
-  {
-    "name": "codex-flow",
-    "version": "1.0.0",
-    "type": "module",
-    "scripts": {
-      "convert": "node scripts/convert-agents-to-codex.mjs",
-      "test": "node --test tests/codex/agent-converter.test.mjs"
-    },
-    "dependencies": {
-      "js-yaml": "^4.1.0"
-    }
+{
+  "name": "codex-flow",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "quickstart": "node scripts/orchestrator.mjs --example",
+    "convert": "node scripts/convert-agents-to-codex.mjs",
+    "test": "node --test tests/codex/*.test.mjs",
+    "orchestrate:example": "node scripts/orchestrator.mjs --example",
+    "orchestrate": "node scripts/orchestrator.mjs -f examples/orchestrator-tasks.json",
+    "product:demo": "node scripts/product-builder.mjs",
+    "swarm": "node scripts/codex-swarm.mjs",
+    "codex:serve": "node scripts/codex-server.mjs",
+    "codex:bootstrap": "node scripts/bootstrap.mjs"
+  },
+  "bin": {
+    "codex-flow": "bin/codex-flow.mjs"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "yaml": "^2.8.1"
   }
+}

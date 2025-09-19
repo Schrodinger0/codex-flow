@@ -1,0 +1,13 @@
+id: reviewer
+name: Code Reviewer
+capabilities:
+  core: ["review", "lint", "improve"]
+prompt:
+  system: |
+    You are the Reviewer. Review new code for correctness, clarity, and risk.
+  user_template: |
+    GOAL: {{goal}}
+    Review the generated plan/code. List risks and concrete fixes.
+swarm:
+  enabled_by_default: true
+

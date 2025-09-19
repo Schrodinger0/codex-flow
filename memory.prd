@@ -1,0 +1,154 @@
+Title: Codex Flow Memory Subsystem — PRD (Production Design)
+
+Status: Draft for review (do not implement yet)
+Owner: Runtime & Platform Team
+Scope: Memory layer for multi‑agent, alias‑aware orchestration
+
+1) Problem & Goals
+- Problem: Multi‑agent runs need fast, policy‑aware context recall and durable traces. Current demo is stateless; SQLite‑only approaches don’t scale with parallelism.
+- Goals:
+  - Fast short‑term recall for active sessions/tasks with strict TTLs.
+  - Durable, queryable long‑term history for audit, analytics, and cross‑session learning.
+  - Policy enforcement for sharing/redaction per agent YAML (`memory.*`, `observability`, `hooks`).
+  - Instance isolation by agent and alias; safe, bounded concurrency.
+  - Observable: metrics, logs, and traces for SLOs and debugging.
+
+Non‑Goals:
+- No bespoke semantic search UX; provide pluggable vector interface.
+- No managed infra provisioning in this phase; expect existing Postgres/Redis.
+
+2) Success Metrics (SLOs)
+- P50 read (short‑term, Redis): ≤ 3 ms; P95 ≤ 10 ms.
+- P50 write (short‑term, Redis): ≤ 5 ms; P95 ≤ 15 ms.
+- P50 append (long‑term, Postgres): ≤ 20 ms; P95 ≤ 60 ms.
+- Availability: Redis ≥ 99.9%, Postgres ≥ 99.9% (single DC). Degrade gracefully (short‑term only) under DB outage.
+- Data: No policy violations (sharing/redaction) in production; 100% redaction coverage at write and egress layers.
+
+3) Users & Key Scenarios
+- Orchestrator: needs quick rolling window context for each alias while respecting concurrency caps.
+- Specialist agents: need read‑only access to approved namespaces and selective write with redaction.
+- Observability/Compliance: durable transcripts, searchable, with retention policies.
+
+4) Architecture (Hybrid)
+- Short‑term store: Redis (namespaced keys, TTL, capped list/ring buffers). Rationale: sub‑ms hot path, simple eviction, per‑alias isolation.
+- Long‑term store: Postgres (normalized tables, indexes, MVCC). Rationale: concurrency, durability, flexible queries, backups.
+- Optional semantic index: pgvector (preferred) or adapter to an external vector DB. Rationale: keep infra surface minimal; colocate with PG when possible.
+- Adapter interface: `MemoryAdapter` with `append`, `read`, `window`, `search`, `prune`, `redact`, `beginSession`, `endSession`.
+- Policy & guard layer: enforces `sharing_policy.share_with`, `redact` fields, `retention` mapping.
+- Telemetry: metrics counters/histograms, structured logs, traces.
+
+5) Data Model
+5.1 Redis (short‑term)
+- Key format: `mem:{agentId}:{alias|_}:{namespace}:{sessionId|_}`
+- Value: JSON entries (capped to N=200 by default) with fields: `ts`, `role`, `content`, `hash`, `artifacts?`, `traceId?`.
+- TTL: from YAML `memory.retention.short_term` (e.g., `7d`).
+- Ops: `RPUSH`, `LTRIM`, `EXPIRE`, `LRANGE` for windows; `HINCRBY` for counters.
+
+5.2 Postgres (long‑term)
+- Tables:
+  - `agent_sessions(id, agent_id, alias, started_at, ended_at, metadata jsonb)`
+  - `agent_memory(id bigserial, agent_id, alias, namespace, session_id, ts timestamptz, role, content jsonb, share_with text[], redactions text[], hash text, PRIMARY KEY(id))`
+  - Indexes: `(agent_id, namespace, ts desc)`, `(session_id, ts)`, GIN on `content` (jsonb_path_ops) when needed.
+- Vector (optional): `agent_memory_embedding(id bigint primary key references agent_memory(id) on delete cascade, embedding vector(768), modality text)` with HNSW or IVF indexes.
+
+6) API Surface (draft TypeScript signatures)
+- `append(ctx: {def, alias, ns, sessionId}, entry: Entry, opts?: {durable?: boolean, redact?: string[]}) -> {id}`
+- `window(ctx, opts?: {limit?: number, sinceTs?: Date}) -> Entry[]`
+- `read(ctx, query: {before?: Date, after?: Date, role?: string, limit?: number}) -> Entry[]`
+- `search(ctx, query: {text?: string, embedding?: number[], topK?: number, filter?: {...}}) -> Entry[]`
+- `prune(ctx, policy?: {maxEntries?: number, before?: Date}) -> {pruned: number}`
+- `redact(ctx, rules: string[]) -> {affected: number}`
+- `beginSession(ctx: {def, alias}) -> {sessionId}` / `endSession(ctx) -> void`
+
+7) Policy Enforcement
+- Sharing: On read, intersect requesting agent/alias with `sharing_policy.share_with`. Deny/log if unauthorized.
+- Redaction: Two‑stage enforcement:
+  1) Write‑time redaction: strip fields listed in YAML `memory.sharing_policy.redact` before persistence.
+  2) Egress redaction: filter view‑specific sensitive fields (defensive layer).
+- Retention: Map `short_term` → Redis TTL; long‑term retention via PG partitioning + scheduled deletes.
+- Tool guards: annotate entries with tool usage; deny reads/writes when tool scopes are insufficient.
+
+8) Concurrency & Isolation
+- Instance isolation: namespace all keys/tables by `agent_id` and `alias`.
+- Idempotency: optional `idempotencyKey` to dedupe rapid retries in `append`.
+- Transactions: `append(durable)` uses PG transaction; Redis op sequence is atomic via pipeline.
+- Backpressure: per‑alias queue depth metric; shed load or slow producers when queues exceed thresholds.
+
+9) Context Selection Algorithm (runner hint)
+- Inputs: `window()`, optional `search()` results, token budget.
+- Score = w1·recency + w2·roleWeight + w3·semanticSim (if available) + w4·namespaceAffinity − penalties(redacted, oversized).
+- Select top‑K under token budget; stable sort by ts within score bands.
+
+10) Observability
+- Metrics (per agent/alias/ns):
+  - `mem_shortterm_read_ms{p50,p95}`, `mem_shortterm_write_ms{p50,p95}`
+  - `mem_longterm_write_ms{p50,p95}`
+  - `mem_entries_total`, `mem_pruned_total`, `mem_redactions_total`, `mem_policy_denied_total`
+  - `mem_queue_depth_current`
+- Logs: structured JSON with `agent_id`, `alias`, `ns`, `session_id`, `action`, `ok`, `ms`, `size`, `redactions`.
+- Traces: spans `mem.append`, `mem.read`, tags: autonomy, concurrency, queue wait, tool.
+
+11) Configuration
+- Env vars (examples):
+  - `MEM_REDIS_URL`, `MEM_REDIS_TTL_DEFAULT=7d`, `MEM_REDIS_MAX_WINDOW=200`
+  - `MEM_PG_URL`, `MEM_PG_POOL_MIN=2`, `MEM_PG_POOL_MAX=20`, `MEM_PG_STATEMENT_TIMEOUT_MS=5000`
+  - `MEM_VECTOR_ENABLED=true|false`, `MEM_VECTOR_DIM=768`
+- Feature flags: `MEM_EGRESS_REDACTION`, `MEM_DEGRADE_TO_REDIS_ON_PG_FAILURE`.
+
+12) Security & Compliance
+- Encryption in transit (TLS) for Redis/PG; at rest per infra policy.
+- Secrets via platform vault; no secrets in repo.
+- Access control: service accounts with least privilege; separate writers/readers.
+- Audit: immutable append‑only log of policy denials and admin overrides.
+
+13) Migration & Rollback
+- Dev fallback: SQLite only for local single‑process demos (no concurrency SLOs). Migration path: export/import to Postgres.
+- Rollback: feature flag to disable long‑term writes; short‑term only mode (degraded durability, preserved latency).
+
+14) Phased Delivery Plan
+- Phase 0: Interfaces + in‑memory mock; unit tests; metrics skeleton.
+- Phase 1: Redis short‑term adapter; TTL + cap; integrate with orchestrator; dashboards for p50/p95.
+- Phase 2: Postgres long‑term adapter; transactions; partitions; background prune; end‑to‑end tests.
+- Phase 3: Policy enforcement (share/redact) at write + egress; compliance logs.
+- Phase 4: Optional vector search (pgvector) + semantic selection; performance validation.
+- Phase 5: Chaos tests (Redis/PG outages), degrade path, alerts.
+
+15) Testing Strategy
+- Unit: adapters, policy checks, redaction, key formatting.
+- Integration: Redis/PG containers; concurrency tests; transaction boundaries; TTL behavior.
+- Property tests: idempotency and ordering under concurrent append/read.
+- Performance: latency/throughput benchmarks; queue depth behavior; memory usage.
+- Chaos: induced network partitions; PG failover; Redis eviction scenarios.
+
+16) Risks & Mitigations
+- Redis eviction of hot keys → Mitigate by caps per window, alerts on evictions, pin critical namespaces.
+- PG contention on hot partitions → Use connection pooling, statement timeouts, and partitioning by month.
+- Policy bypass bugs → Dual‑layer redaction, egress checks, unit tests with golden records.
+- Cost of vector search → Feature flag, cache top results, batch embeddings.
+
+17) Why Not SQLite
+- Concurrency limits (single file, serialized writes) impede multi‑agent/alias parallelism.
+- Operational maturity: backups, pooling, observability, and HA are weaker compared to Postgres.
+- Scaling: sharding and multi‑node setups require bespoke workarounds.
+
+18) Open Questions
+- Do we require per-tenant isolation (schema per tenant) for multi‑org deployments?
+- Maximum window size per namespace by default (200 vs 500)?
+- Embedding provider standardization (model/version pinning) and PII handling in embeddings?
+
+19) Deliverables
+- `src/memory/adapter.ts`: interfaces + in‑memory mock
+- `src/memory/redis.ts`: short‑term adapter
+- `src/memory/postgres.ts`: long‑term adapter
+- `src/memory/vector.ts`: optional pgvector client
+- `src/memory/policy.ts`: sharing/redaction enforcement
+- `tests/memory/**`: unit + integration suites
+- Docs: operator guide, runbooks, dashboards
+
+20) Rollout Checklist
+- Staging soak with shadow traffic
+- Alert thresholds tuned and tested
+- Backups verified (PG), TTL verified (Redis)
+- Chaos drills for degrade mode
+- Sign‑off: Platform, Security, Compliance
+

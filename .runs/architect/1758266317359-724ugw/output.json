@@ -1,0 +1,13 @@
+{
+  "alias": "architect",
+  "agentId": "system-architect",
+  "task": "Execute role-specific tasks for the goal",
+  "ok": true,
+  "ms": 65,
+  "engine": "stub",
+  "summary": "Simulated by architect (system-architect)",
+  "output": {
+    "note": "no-op",
+    "details": "Execute role-specific tasks for the goal"
+  }
+}

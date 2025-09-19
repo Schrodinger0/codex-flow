@@ -1,0 +1,13 @@
+{
+  "alias": "backend",
+  "agentId": "backend-dev",
+  "task": "Execute role-specific tasks for the goal",
+  "ok": true,
+  "ms": 62,
+  "engine": "stub",
+  "summary": "Simulated by backend (backend-dev)",
+  "output": {
+    "note": "no-op",
+    "details": "Execute role-specific tasks for the goal"
+  }
+}

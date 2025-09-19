@@ -1,0 +1,13 @@
+{
+  "alias": "architect",
+  "agentId": "system-architect",
+  "task": "Build a minimal API and tests",
+  "ok": true,
+  "ms": 60,
+  "engine": "stub",
+  "summary": "Simulated by architect (system-architect)",
+  "output": {
+    "note": "no-op",
+    "details": "Build a minimal API and tests"
+  }
+}

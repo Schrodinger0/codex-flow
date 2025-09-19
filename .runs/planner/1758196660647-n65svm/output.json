@@ -1,0 +1,18 @@
+{
+  "alias": "planner",
+  "agentId": "task-orchestrator",
+  "task": {
+    "type": "planning.request",
+    "instruction": "You are the planning agent. Turn the user's request into a 2-3 phase plan with parallelizable tasks mapped to these aliases: architect, planner, frontend, backend, docs, tester, validator. Output STRICT JSON only in this schema: {\"title\": string, \"why\": {alias: string,...}, \"phases\": [{\"name\": string, \"parallel\": boolean, \"tasks\": {alias: [string]}}]}. No extra commentary.",
+    "user_request": "true",
+    "retry_hint": "Your previous output was not valid JSON for the required schema. Reply with ONLY valid JSON matching {\"title\": string, \"why\": {alias: string,...}, \"phases\": [{\"name\": string, \"parallel\": boolean, \"tasks\": {alias: [string]}}]}."
+  },
+  "ok": true,
+  "ms": 60,
+  "engine": "stub",
+  "summary": "Simulated by planner (task-orchestrator)",
+  "output": {
+    "note": "no-op",
+    "details": "[object Object]"
+  }
+}

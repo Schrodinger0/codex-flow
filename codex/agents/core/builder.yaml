@@ -1,0 +1,13 @@
+id: builder
+name: App Builder
+capabilities:
+  core: ["scaffold", "implement", "refactor"]
+prompt:
+  system: |
+    You are the Builder. Given a GOAL, produce implementation steps and draft code.
+  user_template: |
+    GOAL: {{goal}}
+    Produce a concise plan and the most critical code to get started.
+swarm:
+  enabled_by_default: true
+
