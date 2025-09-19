@@ -1,4 +1,93 @@
-Last updated: 2025-09-18
+Last updated: 2025-09-19
+
+# Current Goal (What We’re Solving Now)
+- Get a basic app built by agents — actually calling agents through Codex CLI and having agents write code files (not just a fallback scaffold).
+- Verify end‑to‑end: server (CLI) → agents run (exit 0) → agent‑produced files appear under a scaffold dir → app runs.
+
+# Immediate Next Steps (Agent‑built, no fallback)
+
+Option A — Direct‑write via Codex CLI (workspace write, no approvals)
+- Start server from a trusted Git repo (repo root):
+```bash
+cd /home/xanacan/Dropbox/code/codexflow1
+export CODEX_AGENTS_DIR=/home/xanacan/Dropbox/code/codexflow1/codex/agents
+codex-flow serve --runner cli --port 8787 \
+  --run-cmd 'codex exec --json --full-auto --ask-for-approval never -'
+```
+- Run build with fallback disabled so only agent writes count:
+```bash
+codex-flow run \
+  --prompt "Build a SaaS app for butterflies with supabase auth under scaffold/butterflies (frontend/, server/, docs/)" \
+  --yes --plan \
+  --runtime codex --codex-url http://localhost:8787 --provider cli \
+  --selector finite --decomposer llm \
+  --apply-dry-run \
+  --verbose
+```
+- Verify files were written directly by Codex in the repo (no fallback):
+```bash
+ls -la scaffold/butterflies
+```
+
+Option B — Files‑contract (agents return files[], orchestrator writes)
+- Keep server as above, then force file outputs from builder roles:
+```bash
+cat << 'JSON' | codex-flow run --yes --plan \
+  --runtime codex --codex-url http://localhost:8787 --provider cli \
+  --apply-patches --scaffold-dir scaffold/butterflies \
+  --selector finite --decomposer llm \
+  --verbose -f -
+{
+  "coder": [
+    {
+      "type": "work.request",
+      "role": "coder",
+      "goal": "Create a minimal Next.js page and a simple Express API",
+      "constraints": [
+        "No shell or network access; do not attempt localhost",
+        "Do not modify files directly; return files via JSON"
+      ],
+      "output_contract": {
+        "kind": "files",
+        "schema": "{ \"files\": [ { \"path\": \"relative/path.ext\", \"content\": \"...\" } ] }",
+        "alt": "```file:relative/path.ext\n<content>```"
+      },
+      "root_dir": "scaffold/butterflies",
+      "instruction": "Return STRICT JSON only: {\\\"files\\\":[{\\\"path\\\":\\\"...\\\",\\\"content\\\":\\\"...\\\"}]}. Paths must be relative to \\\"scaffold/butterflies\\\" and prefer frontend/, server/, docs/."
+    }
+  ],
+  "backend-dev": [
+    {
+      "type": "work.request",
+      "role": "backend",
+      "goal": "Add Express /api/health route and starter",
+      "constraints": ["Return files via JSON only"],
+      "output_contract": { "kind":"files","schema":"{ \"files\": [ { \"path\": \"relative/path.ext\", \"content\": \"...\" } ] }","alt":"```file:relative/path.ext\n<content>```" },
+      "root_dir": "scaffold/butterflies",
+      "instruction": "Return STRICT JSON only with files. Use server/index.mjs for Express and ensure /api/health returns { ok: true }."
+    }
+  ],
+  "api-docs": [
+    {
+      "type": "work.request",
+      "role": "docs",
+      "goal": "Write brief run instructions",
+      "constraints": ["Return files via JSON only"],
+      "output_contract": { "kind":"files","schema":"{ \"files\": [ { \"path\": \"relative/path.ext\", \"content\": \"...\" } ] }","alt":"```file:relative/path.ext\n<content>```" },
+      "root_dir": "scaffold/butterflies",
+      "instruction": "Return STRICT JSON only with files. Create docs/README.md explaining how to run frontend and API."
+    }
+  ]
+}
+JSON
+```
+- Expected: events show `applied_patches` (no fallback line), files land under scaffold/butterflies.
+
+# Smoke to Confirm CLI Path
+```bash
+which codex && codex --version && codex whoami
+printf 'USER:\nReview the text "hello world"\n\nASSISTANT:\n' | codex exec --json --skip-git-repo-check -
+```
 
 # Next Actions: Clean Test Pass for Codex Flow
 

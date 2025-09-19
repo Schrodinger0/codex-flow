@@ -1,0 +1,13 @@
+{
+  "alias": "tester",
+  "agentId": "tester",
+  "task": "Add unit tests for Markdown adapter and components; add smoke test that adds a To‑Do and toggles it.",
+  "ok": true,
+  "ms": 61,
+  "engine": "stub",
+  "summary": "Simulated by tester (tester)",
+  "output": {
+    "note": "no-op",
+    "details": "Add unit tests for Markdown adapter and components; add smoke test that adds a To‑Do and toggles it."
+  }
+}

@@ -1,0 +1,1 @@
+"Validate production readiness: build succeeds, lints clean, basic a11y check passes, package.json scripts documented."
