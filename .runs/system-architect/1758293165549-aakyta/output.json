@@ -1,0 +1,13 @@
+{
+  "alias": "system-architect",
+  "agentId": "system-architect",
+  "task": "architecture design",
+  "ok": true,
+  "ms": 78,
+  "engine": "stub",
+  "summary": "Simulated by system-architect (system-architect)",
+  "output": {
+    "note": "no-op",
+    "details": "architecture design"
+  }
+}

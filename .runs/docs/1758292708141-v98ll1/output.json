@@ -1,0 +1,13 @@
+{
+  "alias": "docs",
+  "agentId": "api-docs",
+  "task": "Generate README quickstart and usage; if API present, output OpenAPI YAML for To‑Dos.",
+  "ok": true,
+  "ms": 102,
+  "engine": "stub",
+  "summary": "Simulated by docs (api-docs)",
+  "output": {
+    "note": "no-op",
+    "details": "Generate README quickstart and usage; if API present, output OpenAPI YAML for To‑Dos."
+  }
+}

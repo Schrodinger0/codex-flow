@@ -1,0 +1,13 @@
+{
+  "alias": "architect",
+  "agentId": "system-architect",
+  "task": "Architect a To‑Do web app using React + shadcn/ui; store each To‑Do as a Markdown file with front‑matter (id, createdAt, done) and body = description. Decide on local-only vs API-based.",
+  "ok": true,
+  "ms": 93,
+  "engine": "stub",
+  "summary": "Simulated by architect (system-architect)",
+  "output": {
+    "note": "no-op",
+    "details": "Architect a To‑Do web app using React + shadcn/ui; store each To‑Do as a Markdown file with front‑matter (id, createdAt, done) and body = description. Decide on local-only vs API-based."
+  }
+}

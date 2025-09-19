@@ -1,0 +1,13 @@
+{
+  "alias": "planner",
+  "agentId": "task-orchestrator",
+  "task": "Produce a task breakdown for frontend (React+shadcn, components, Markdown adapter), optional backend (file-backed API), docs, tests, and validation; annotate which can run in parallel.",
+  "ok": true,
+  "ms": 99,
+  "engine": "stub",
+  "summary": "Simulated by planner (task-orchestrator)",
+  "output": {
+    "note": "no-op",
+    "details": "Produce a task breakdown for frontend (React+shadcn, components, Markdown adapter), optional backend (file-backed API), docs, tests, and validation; annotate which can run in parallel."
+  }
+}

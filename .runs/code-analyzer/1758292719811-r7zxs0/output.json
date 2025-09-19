@@ -1,0 +1,13 @@
+{
+  "alias": "code-analyzer",
+  "agentId": "code-analyzer",
+  "task": "code review",
+  "ok": true,
+  "ms": 77,
+  "engine": "stub",
+  "summary": "Simulated by code-analyzer (code-analyzer)",
+  "output": {
+    "note": "no-op",
+    "details": "code review"
+  }
+}

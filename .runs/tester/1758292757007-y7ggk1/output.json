@@ -1,0 +1,13 @@
+{
+  "alias": "tester",
+  "agentId": "tester",
+  "task": "Write tests/smoke",
+  "ok": true,
+  "ms": 74,
+  "engine": "stub",
+  "summary": "Simulated by tester (tester)",
+  "output": {
+    "note": "no-op",
+    "details": "Write tests/smoke"
+  }
+}

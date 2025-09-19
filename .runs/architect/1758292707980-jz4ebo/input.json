@@ -1,0 +1,1 @@
+"Architect a To‑Do web app using React + shadcn/ui; store each To‑Do as a Markdown file with front‑matter (id, createdAt, done) and body = description. Decide on local-only vs API-based."

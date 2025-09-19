@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1",
+    "description": "Buy groceries",
+    "status": "completed",
+    "createdAt": "2025-09-19T15:09:42.594Z",
+    "completedAt": "2025-09-19T15:09:48.715Z"
+  },
+  {
+    "id": "2",
+    "description": "Call mom",
+    "status": "pending",
+    "createdAt": "2025-09-19T15:09:44.732Z",
+    "completedAt": null
+  }
+]

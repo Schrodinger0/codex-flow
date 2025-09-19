@@ -1,0 +1,13 @@
+{
+  "alias": "backend",
+  "agentId": "backend-dev",
+  "task": "If API path chosen: implement minimal endpoints (GET/POST/PATCH) that read/write Markdown files under data/todos/*.md with front‑matter.",
+  "ok": true,
+  "ms": 88,
+  "engine": "stub",
+  "summary": "Simulated by backend (backend-dev)",
+  "output": {
+    "note": "no-op",
+    "details": "If API path chosen: implement minimal endpoints (GET/POST/PATCH) that read/write Markdown files under data/todos/*.md with front‑matter."
+  }
+}

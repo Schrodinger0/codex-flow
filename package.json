@@ -5,19 +5,31 @@
   "scripts": {
     "quickstart": "node scripts/orchestrator.mjs --example",
     "convert": "node scripts/convert-agents-to-codex.mjs",
-    "test": "node --test tests/codex/*.test.mjs",
+    "test": "jest",
+    "test:codex": "node --test tests/codex/*.test.mjs",
     "orchestrate:example": "node scripts/orchestrator.mjs --example",
     "orchestrate": "node scripts/orchestrator.mjs -f examples/orchestrator-tasks.json",
     "product:demo": "node scripts/product-builder.mjs",
     "swarm": "node scripts/codex-swarm.mjs",
     "codex:serve": "node scripts/codex-server.mjs",
-    "codex:bootstrap": "node scripts/bootstrap.mjs"
+    "codex:bootstrap": "node scripts/bootstrap.mjs",
+    "start": "node todo.js",
+    "todo": "node todo.js",
+    "todo:test": "node tests/todo.test.mjs",
+    "todo:demo": "node demo.mjs",
+    "todo:examples": "node examples/todo-examples.mjs"
   },
   "bin": {
     "codex-flow": "bin/codex-flow.mjs"
   },
   "dependencies": {
+    "better-sqlite3": "^12.2.0",
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "dotenv": "^17.2.2",
+    "jest": "^30.1.3",
     "js-yaml": "^4.1.0",
+    "sqlite3": "^5.1.7",
     "yaml": "^2.8.1"
   }
 }

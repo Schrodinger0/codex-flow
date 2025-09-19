@@ -1,30 +1,12 @@
 {
-  "generatedAt": "2025-09-18T11:52:31.368Z",
+  "generatedAt": "2025-09-19T14:52:09.709Z",
   "agents": {
-    "backend-dev": {
-      "tasks": 1,
-      "totalMs": 28063,
-      "avgMs": 28063
-    },
-    "mobile-dev": {
-      "tasks": 1,
-      "totalMs": 30690,
-      "avgMs": 30690
-    },
-    "api-docs": {
-      "tasks": 1,
-      "totalMs": 40713,
-      "avgMs": 40713
-    },
-    "cicd-engineer": {
-      "tasks": 1,
-      "totalMs": 36155,
-      "avgMs": 36155
-    },
     "code-analyzer": {
       "tasks": 1,
-      "totalMs": 34058,
-      "avgMs": 34058
+      "totalMs": 125,
+      "avgMs": 125,
+      "ok": 1,
+      "successRate": 1
     }
   }
 }

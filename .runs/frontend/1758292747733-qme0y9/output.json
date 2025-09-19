@@ -1,0 +1,13 @@
+{
+  "alias": "frontend",
+  "agentId": "coder",
+  "task": "Scaffold React app with shadcn/ui; implement To‑Do list, add, toggle done; persist to Markdown files via a simple adapter (or call API if present). Include basic styling.",
+  "ok": true,
+  "ms": 87,
+  "engine": "stub",
+  "summary": "Simulated by frontend (coder)",
+  "output": {
+    "note": "no-op",
+    "details": "Scaffold React app with shadcn/ui; implement To‑Do list, add, toggle done; persist to Markdown files via a simple adapter (or call API if present). Include basic styling."
+  }
+}

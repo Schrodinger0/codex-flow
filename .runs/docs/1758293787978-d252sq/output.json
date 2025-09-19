@@ -1,0 +1,17 @@
+{
+  "alias": "docs",
+  "agentId": "api-docs",
+  "task": "Execute role-specific tasks for the goal",
+  "ok": true,
+  "ms": 49,
+  "engine": "codex",
+  "summary": "Task completed by api-docs (docs)",
+  "output": {
+    "agentId": "api-docs",
+    "alias": "docs",
+    "task": "Execute role-specific tasks for the goal",
+    "status": "completed",
+    "timestamp": "2025-09-19T14:56:28.017Z",
+    "simulated": true
+  }
+}

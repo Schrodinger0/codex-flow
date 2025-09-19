@@ -1,0 +1,13 @@
+{
+  "alias": "docs",
+  "agentId": "api-docs",
+  "task": "Execute role-specific tasks for the goal",
+  "ok": true,
+  "ms": 102,
+  "engine": "stub",
+  "summary": "Simulated by docs (api-docs)",
+  "output": {
+    "note": "no-op",
+    "details": "Execute role-specific tasks for the goal"
+  }
+}
